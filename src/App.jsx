@@ -13,30 +13,16 @@
 //import UseState03 from "./react-study/02-useState/UseState03";
 //import UseState04 from "./react-study/02-useState/UseState04";
 //import UseStaate05 from "./react-study/02-useState/UseState05";
-import UseState06 from "./react-study/02-useState/UseState06";
+//import UseState06_me from "./react-study/02-useState/UseState06_me";
+//import UseState06 from "./react-study/02-useState/UseState06";
+
+import Study from "./react-study/Study";
 
 function App() {
 
   return (
-  <>
-    {/* App01 호출 */}  
-    { /*
-    <첫번째 />
-    <두번째 />
-    <세번째 />
-    <네번째 />
-    <h1>111</h1>
-    <App05 />
-    <App06 />
-    <UseState03 />
-    <UseState04 />
-    <UseState05 />
-    */ }
-
-    
-    
-    
-    <UseState06 />
+    <>
+      <Study />
     </>
   )
 }

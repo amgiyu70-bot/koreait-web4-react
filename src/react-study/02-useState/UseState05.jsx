@@ -31,6 +31,7 @@ export default function UseState05() {
         setTodos(neTodos);
         */
        setTodos( (prev) => [...prev, inpV]);
+       setInV("");
 
     }
 
