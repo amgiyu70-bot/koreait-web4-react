@@ -1,18 +1,19 @@
-import React from 'react'
 
-const overLayStyle = {
-    position : "fiexd",
+
+const overLayStyle = {  
+
+    position: "fixed",
     top: 0,
-    left:0,
-    width : "100vw",
-    height : "100vh",
+    left: 0,
+    width: "100vw",
+    height: "100vh",
     backgroundColor: "rgba(0,0,0, 0.3)",
     display: "flex",
-    alignItems : "center",
-    justifyCountent: "center",
+    alignItems: "center",
+    justifyContent: "center",
 }
 
-const modalTyle = {
+const modalStyle = {
     backgroundColor: "white",
     with : "400px",
     height: "360px",
@@ -20,23 +21,19 @@ const modalTyle = {
     borderRadius: "8px",
 }
 
-const chkClose = () => {
 
-}
+export default function Modal({ isOpen, post, chks }) {
+    if (!isOpen) return null;
+    // jsx에서 falsy, [], boolean 표현 안됨
 
-export default function Modal({isOpen, post,}) {
-
-    if (!isOpen) {
-        return unll;  // null, falsy, [], boolean jax에서 표현안함
-    }
-  return (
-    <div style={overLayStyle}>
-        <div style={modalTyle}>
-            <h2>{post.title} </h2>
-             <p>{post.cotent} </p>
-             {/*눌리면isOpen이 true 가 되어얌함 */}
-             <button  >닫기</button>
+    return (
+        <div style={overLayStyle}>
+            <div style={modalStyle}>
+                <h2>{post.title}</h2>
+                <p>{post.content}</p>
+                {/* 눌리면 isOpen이 true가 되어야함 */}
+                <button onClick={chks}>닫기</button>
+            </div>
         </div>
-    </div>
-  )
+    );
 }
