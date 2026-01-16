@@ -31,11 +31,11 @@ export default function Test03() {
           let found = null;
   
           for (let i=0; i< comments.length; i++) {
-              let comment = comments[i];
-              if (comment.author===author) {
+              let comment2 = comments[i];
+              if (comment2.author===author) {
 
-                alert(comment.author);
-                  setComment(comment);
+                alert(comment2.author);
+                  setComment(comment2);
               }
   
           }

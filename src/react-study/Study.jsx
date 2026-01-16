@@ -13,6 +13,11 @@ import ModalContainer from './02-useState/Modal/ModalContainer';
 import Test01 from './test/Test01';
 import Login from './test/Test02';
 import Test03 from './test/Test03';
+import UseEffect01 from './03-useEffect/UseEffect01';
+import Unmount from './03-useEffect/Unmount/Unmount';
+import UseEffect02 from './03-useEffect/UseEffect02';
+//import UseEffect03 from './03-useEffect/UseEffect03';
+import UseEffect04 from './03-useEffect/UseEffect04';
 
 export default function Study() {
 
@@ -31,7 +36,11 @@ export default function Study() {
         12: <Test01 />,
         13: <Login />,
         14: <Test03 />,
+        15: <UseEffect01 />,
+        16: <Unmount />,
+        17: <UseEffect02 />,
+        19: <UseEffect04 />,
 
     }
-  return stateStudy[14];
+  return stateStudy[19];
 }

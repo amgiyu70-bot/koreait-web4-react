@@ -5,7 +5,7 @@ const NAV_ITEMS = [
   {id: 1, label: "홈"},
   {id: 2, label: "게시판"},
   {id: 3, label: "마이페이지"},
-  {id: 4, label: "로그아웂"},
+  {id: 4, label: "로그아웃"},
 ]
 
 export default function NavBar() {
