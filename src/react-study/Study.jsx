@@ -10,6 +10,9 @@ import UseState08 from './02-useState/UseState08';
 import UseState09 from './02-useState/UseState09';
 import NavBar from './02-useState/NavBar/NavBar';
 import ModalContainer from './02-useState/Modal/ModalContainer';
+import Test01 from './test/Test01';
+import Login from './test/Test02';
+import Test03 from './test/Test03';
 
 export default function Study() {
 
@@ -24,8 +27,11 @@ export default function Study() {
         8: <UseState08 />,
         9: <UseState09 />,
         10: <NavBar />,
-        11: <ModalContainer />
+        11: <ModalContainer />,
+        12: <Test01 />,
+        13: <Login />,
+        14: <Test03 />,
 
     }
-  return stateStudy[11];
+  return stateStudy[14];
 }
