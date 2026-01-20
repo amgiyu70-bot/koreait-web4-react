@@ -1,91 +1,86 @@
 import React, { useEffect, useState } from 'react'
 
-export default function UseEffect04() {
 
-    const [formVal, setFomrmVal] = useState({
-        email : "",
-        password: "",
+export default function () {
+    const [formVal, setFormVal] = useState({
+        email: "",
+        password: ""
     });
 
-    // {email : "@을 넣어주세요"}
+    // {"email": "@넣어주세요", "password": "8자이상"}
     const [errorMsg, setErrorMsg] = useState({})
-    const [isDisabled, SetIsDisabled] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(false);
 
-    // 이벤트객체로 현재 입혁하고 있는 input 특정하여
+    // 이벤트객체로 현재 입력하고있는 input 특정하여
     // setForm에 js객체를 업데이트
-    const inputChageHanlder = (e) => {
-
+    const inputChangeHanlder = (e) => {
         const {name, value} = e.target;
-
-        setFomrmVal((prev) => {
-
+        setFormVal((prev) => {
             return {
                 ...prev,
-                [name] : value,
-
+                [name]: value // 중복된 key면 업데이트
             }
-
-        })
-        /*
-        if (e.target.name=="email") {
-             
-        } else {
-
-        }
-            */
-
+        });
     }
 
     useEffect(() => {
-        SetIsDisabled(() => true);
+        setIsDisabled(() => true);
+        
         const newErrorMsg = {}
-        if (formVal.email.length>0 && !formVal.email.includes("@")) {
+        // 1.이메일에 @가 있는지 검사
+        // -> 에러메세지 set
+        if(formVal.email.length > 0 && !formVal.email.includes("@")) {
             newErrorMsg.email = "이메일 형식에 맞게 입력";
         }
-
-        if (formVal.email.length>0 && !formVal.password.length <8) {
-            newErrorMsg.password = "비밀번호는  8자 이상";
+        // 2.비밀번호의 길이가 8미만인지 검사
+        // -> 에러메세지 set
+        if(formVal.password.length > 0 && formVal.password.length < 8) {
+            newErrorMsg.password = "비밀번호는 8자 이상";
         }
+        setErrorMsg(newErrorMsg);
 
-         setErrorMsg(newErrorMsg);
-
-        // 만약에 newErrorMsg가 빈 {} fkaus
-        // -> 장 입력했승
+        // 만약에 newErrorMsg가 빈 {} 라면?
+        // -> 잘 입력했음
         // -> 버튼 활성화
-        const keys = Object.keys(newErrorMsg); // key 들만 리스트로 반환
-        if (formVal.email && formVal.password && keys.length===0) {
-            SetIsDisabled(false);
+        // key들만 리스트로 반환
+        const keys = Object.keys(newErrorMsg)
+        if (formVal.email && 
+            formVal.password && 
+            keys.length === 0
+        ) {
+            setIsDisabled(false);
         }
-       
-        
-        // 1. 이메일 @
-       // SetIsDisabled(true);
-    })
+
+    }, [formVal]);
+
+
   return (
     <div>
         <div>
             <input 
-            type="email" 
-            name="email" 
-            placeholder='이메일'
-            value={formVal.email}
-            onChange={inputChageHanlder}
+                type="email" 
+                name='email'  
+                placeholder='이메일'
+                value={formVal.email}
+                onChange={inputChangeHanlder}
             />
             {errorMsg.email && <p>{errorMsg.email}</p>}
         </div>
         <div>
-             <input 
-            type="password" 
-            name="password" 
-            placeholder='비밀번호'
-            value={formVal.password}
-            onChange={inputChageHanlder}
+            <input 
+                type="password" 
+                name='password'  
+                placeholder='비밀번호'
+                value={formVal.password}
+                onChange={inputChangeHanlder}
             />
-             {errorMsg.password && <p>{errorMsg.password}</p>}
+            {errorMsg.password && <p>{errorMsg.password}</p>}
         </div>
-        {/* 유효성 통과 */}
-        <button disabled={isDisabled}
-        onClick={() => alert("가입 성공")}>가입하기</button>
+        {/* 유효성 통과x -> disabled */}
+        <button 
+            disabled={isDisabled}
+            onClick={() => alert("가입성공!")}
+        >가입하기</button>
     </div>
   )
 }

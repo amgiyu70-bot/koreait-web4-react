@@ -16,8 +16,16 @@ import Test03 from './test/Test03';
 import UseEffect01 from './03-useEffect/UseEffect01';
 import Unmount from './03-useEffect/Unmount/Unmount';
 import UseEffect02 from './03-useEffect/UseEffect02';
-//import UseEffect03 from './03-useEffect/UseEffect03';
+import UseEffect03 from './03-useEffect/UseEffect03';
 import UseEffect04 from './03-useEffect/UseEffect04';
+import Memerform from './test/Memerform';
+import JoinForm from './test/JoinForm';
+import UseRef01 from './04-useRef/UseRef01';
+import UseRef02 from './04-useRef/UseRef02';
+import Emotion01 from './Emotion/Emotion01';
+import Emotion02 from './Emotion/Emotion02';
+import Router01 from './ReactRouter/Router01/Router01';
+import Router02 from './ReactRouter/Router02/Router02';
 
 export default function Study() {
 
@@ -39,8 +47,17 @@ export default function Study() {
         15: <UseEffect01 />,
         16: <Unmount />,
         17: <UseEffect02 />,
+        18: <UseEffect03 />,
         19: <UseEffect04 />,
+        20: <Memerform />,
+        21: <JoinForm />,
+        22: <UseRef01 />,
+        23: <UseRef02 />,
+        24: <Emotion01 />,
+        25: <Emotion02 />,
+        26: <Router01 />,
+        27: <Router02 />,
 
     }
-  return stateStudy[19];
+  return stateStudy[27];
 }
