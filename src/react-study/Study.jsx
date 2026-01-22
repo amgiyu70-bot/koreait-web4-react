@@ -26,6 +26,11 @@ import Emotion01 from './Emotion/Emotion01';
 import Emotion02 from './Emotion/Emotion02';
 import Router01 from './ReactRouter/Router01/Router01';
 import Router02 from './ReactRouter/Router02/Router02';
+import Router03 from './ReactRouter/Router03/Router03';
+import Router04 from './ReactRouter/Router04/Router04';
+import Router05 from './ReactRouter/Router05/Router05';
+import Zustand01 from './Zustand/Zustand01';
+import Zustand02 from './Zustand/Zustand02';
 
 export default function Study() {
 
@@ -57,7 +62,12 @@ export default function Study() {
         25: <Emotion02 />,
         26: <Router01 />,
         27: <Router02 />,
+        28: <Router03 />,
+        29: <Router04 />,
+        30: <Router05 />,
+        31: <Zustand01 />,
+        32: <Zustand02 />,
 
     }
-  return stateStudy[27];
+  return stateStudy[32];
 }

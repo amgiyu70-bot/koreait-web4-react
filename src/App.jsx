@@ -17,11 +17,13 @@
 //import UseState06 from "./react-study/02-useState/UseState06";
 
 import Study from "./react-study/Study";
+import MyToast from "./react-study/Zustand/MyToast";
 
 function App() {
 
   return (
     <>
+      <MyToast />
       <Study />
     </>
   )
