@@ -31,6 +31,8 @@ import Router04 from './ReactRouter/Router04/Router04';
 import Router05 from './ReactRouter/Router05/Router05';
 import Zustand01 from './Zustand/Zustand01';
 import Zustand02 from './Zustand/Zustand02';
+import Zustand03 from './Zustand/Zustand03';
+import Zustand04 from './Zustand/Zustand04';
 
 export default function Study() {
 
@@ -67,7 +69,9 @@ export default function Study() {
         30: <Router05 />,
         31: <Zustand01 />,
         32: <Zustand02 />,
+        33: <Zustand03 />,
+        34: <Zustand04 />,
 
     }
-  return stateStudy[32];
+  return stateStudy[34];
 }

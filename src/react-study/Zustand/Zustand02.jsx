@@ -2,32 +2,29 @@ import React, { useState } from 'react'
 import { useCurrentBook } from './store/bookStore';
 
 export default function Zustand02() {
-
-    const [formm, setForm] = useState({      
+    const [form, setForm] = useState({      
             title: "",
             author: "",
             price: 0          
     });
 
-    const {setBook} = useCurrentBook();
+    const {setNewBook} = useCurrentBook();
 
-    const hadleChage = (e) => {
-        const {name, value} = e.target;
+    const handleChange = (e) => {
+        let {name, value} = e.target;
         setForm((prev) => {
-
             if (name === "price") {
-               // value = parseInt(value);
+                value = parseInt(value);
             }
             return {
                 ...prev,
                 [name]: value
             }
         })
-
     }
     const handleSubmit = () => {
 
-        setBook({...form});
+         setNewBook({...form});
 
          setForm ({
             title: "",
@@ -44,8 +41,8 @@ export default function Zustand02() {
             type="text" 
             name = "title"
             placeholder='책제목'
-            onChange={hadleChage}
-            value={formm.title}
+            onChange={handleChange}
+            value={form.title}
 
 
         />
@@ -53,8 +50,8 @@ export default function Zustand02() {
             type="text" 
             name = "author"
             placeholder='저자'
-            onChange={hadleChage}
-            value={formm.author}
+            onChange={handleChange}
+            value={form.author}
 
 
         />
@@ -62,8 +59,8 @@ export default function Zustand02() {
             type="text" 
             name = "price"
             placeholder='가격'
-            onChange={hadleChage}
-            value={formm.price}
+            onChange={handleChange}
+            value={form.price}
 
 
         />

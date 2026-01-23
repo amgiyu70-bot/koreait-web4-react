@@ -1,0 +1,138 @@
+import React, { useState } from 'react'
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import { useSurVeyStore } from './store/surveyStore';
+
+
+export default function Zustand03() {
+  return (
+    <BrowserRouter> 
+        <Routes>
+            <Route path='/' element={<Step1 />} />
+            <Route path='/step2' />
+        </Routes>
+    </BrowserRouter>
+  )
+}
+
+
+function Step1() {
+
+     const {setSurVeyInfo} = useSurVeyStore();
+
+    const [name, setName] = useState("");
+    const [age, setAge] = useState("");
+    const [gender, setGender] = useState("");
+
+    const navigator = useNavigate();
+    const handleNext = () => {
+        // 도저)) 전역상태에 있는 suveyData에서
+        // name, age, gender만 저장될 수 있는 함수호출
+
+        const myUpdateDate = {
+            name: name,
+            age : age,
+            gender: gender
+        }
+
+        setSurVeyInfo(myUpdateDate);
+        navigator("/step02");
+    }
+
+    return (
+        <div>
+            <div>
+                <h2>레스토랑 설문</h2>
+                <input 
+                    type="text" 
+                    value={name}
+                    onChange={(e) => setName(e.target.value) } 
+                    placeholder='이름'
+                />
+                
+                <input 
+                    type="number" 
+                    value={age}
+                    onChange={(e) => setAge(e.target.value) } 
+                    placeholder='나이'
+                />
+
+                <select value={gender} onChange={(e) => setGender(e.target.value) } >
+                    <option value="">성별선택</option>
+                    <option value="male">남성</option>
+                    <option value="female">여성</option>
+                </select>
+
+                <button onClick={handleNext}>다음</button>
+
+            </div>
+        </div>
+    )
+}
+
+function Step2() {
+    const navigate = useNavigate();
+    const [satisfaction, setSatisfaction] = useState("");
+    const [recommend, setRecommend] = useState("");
+    const [email, setEmail] = useState("");
+    const {setSurVeyInfo} = useSurVeyStore();
+
+    const handleSubmit = () => {
+        if (satisfaction && recommend && email) {
+            alert("제출완료");
+        }
+
+        const data = {
+            "satisfaction": satisfaction,
+            "recommend": recommend,
+            "email": email
+        }
+
+        //
+        setSurVeyInfo(data);
+    }
+
+    const scores =[
+        <option>선택하세요</option>,
+        <option key="1" value="1">1</option>,
+        <option key="2" value="2">2</option>,
+        <option key="3" value="3">3</option>,
+        <option key="4" value="4">4</option>,
+        <option key="5" value="5">5</option>,
+
+    ]
+
+    return (
+        <div>
+            <div>
+                <h2>설문조사</h2>
+                <label>만족도</label>
+                <select 
+                    value={satisfaction}
+                    onChange={(e) => setSatisfaction(e.target.value)}
+                >
+                    {scores}
+                </select>
+            </div>
+
+            <div>
+                
+                <label>추천 의향</label>
+                <select value={recommend}
+                onChange={(e) = setRecommend(e.target.value)}>
+                    {scores}
+                </select>
+            </div>
+            <div>
+                <input 
+                    type="email" 
+                    value={email} 
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder='이메일 입력'
+                     />
+            </div>
+             <button onClick={handleSubmit}>제출</button>
+           
+        </div>
+    )
+
+}
