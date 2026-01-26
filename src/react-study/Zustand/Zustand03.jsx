@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
-import { useSurVeyStore } from './store/surveyStore';
+import { useSurveyStore } from './store/surveyStore';
 
 
 export default function Zustand03() {
   return (
-    <BrowserRouter> 
-        <Routes>
-            <Route path='/' element={<Step1 />} />
-            <Route path='/step2' />
-        </Routes>
+    <BrowserRouter>
+          <Routes>
+            <Route path='/' element={<Step1 />}/>
+            <Route path='/step2' element={<Step2 />} />
+          </Routes>
     </BrowserRouter>
   )
 }
@@ -17,7 +17,7 @@ export default function Zustand03() {
 
 function Step1() {
 
-     const {setSurVeyInfo} = useSurVeyStore();
+     const {setSurveyInfo} = useSurveyStore();
 
     const [name, setName] = useState("");
     const [age, setAge] = useState("");
@@ -34,8 +34,8 @@ function Step1() {
             gender: gender
         }
 
-        setSurVeyInfo(myUpdateDate);
-        navigator("/step02");
+        setSurveyInfo(myUpdateDate);
+        navigator("/step2");
     }
 
     return (
@@ -74,7 +74,7 @@ function Step2() {
     const [satisfaction, setSatisfaction] = useState("");
     const [recommend, setRecommend] = useState("");
     const [email, setEmail] = useState("");
-    const {setSurVeyInfo} = useSurVeyStore();
+    const {setSurveyInfo} = useSurveyStore();
 
     const handleSubmit = () => {
         if (satisfaction && recommend && email) {
@@ -88,7 +88,7 @@ function Step2() {
         }
 
         //
-        setSurVeyInfo(data);
+        setSurveyInfo(data);
     }
 
     const scores =[
@@ -117,8 +117,9 @@ function Step2() {
             <div>
                 
                 <label>추천 의향</label>
-                <select value={recommend}
-                onChange={(e) = setRecommend(e.target.value)}>
+                <select 
+                value={recommend}
+                onChange={(e) => setRecommend(e.target.value)}>
                     {scores}
                 </select>
             </div>

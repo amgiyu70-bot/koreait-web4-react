@@ -33,6 +33,9 @@ import Zustand01 from './Zustand/Zustand01';
 import Zustand02 from './Zustand/Zustand02';
 import Zustand03 from './Zustand/Zustand03';
 import Zustand04 from './Zustand/Zustand04';
+import Axios01 from './02-useState/Axios/Axios01';
+import Axios02 from './02-useState/Axios/Axios02';
+import Axios03 from './02-useState/Axios/Axios03';
 
 export default function Study() {
 
@@ -71,7 +74,10 @@ export default function Study() {
         32: <Zustand02 />,
         33: <Zustand03 />,
         34: <Zustand04 />,
+        35: <Axios01 />,
+        36: <Axios02 />,
+        37: <Axios03 />,
 
     }
-  return stateStudy[34];
+  return stateStudy[37];
 }

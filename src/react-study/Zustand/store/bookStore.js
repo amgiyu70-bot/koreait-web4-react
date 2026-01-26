@@ -29,7 +29,7 @@ export const useBookList = create((set) => {
         books: [
         {
         id: 1,
-        title: "자바의정석",
+        title: "자바의정석1",
         author: "남궁성",
         price: "30000"
         }
