@@ -36,6 +36,10 @@ import Zustand04 from './Zustand/Zustand04';
 import Axios01 from './02-useState/Axios/Axios01';
 import Axios02 from './02-useState/Axios/Axios02';
 import Axios03 from './02-useState/Axios/Axios03';
+import UserRouter from './02-useState/Axios/UserPostList/UserRouter';
+import Axios04 from './02-useState/Axios/Axios04';
+import Axios05 from './02-useState/Axios/Axios05';
+
 
 export default function Study() {
 
@@ -77,7 +81,10 @@ export default function Study() {
         35: <Axios01 />,
         36: <Axios02 />,
         37: <Axios03 />,
+        38: <UserRouter />,
+        39: <Axios04 />,
+        40: <Axios05 />,
 
     }
-  return stateStudy[37];
+  return stateStudy[40];
 }

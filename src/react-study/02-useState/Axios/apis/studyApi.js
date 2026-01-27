@@ -15,3 +15,19 @@ export const getUserApi = async () => {
     return response;
     //return response.data;
 }
+
+// api 요청할수를 만들고
+// userPositList에서 import하여 완성
+export const getUserPosts = async (p) => {  
+
+     const response = await instance.get("/posts", {
+        // params로 정의하면 쿼리스트링 알아서 조립해줌
+        // https://jsonplaceholder.typicode.com/posts?userId=키보드
+        params: {
+            "userId": p
+        }
+    });
+
+     return response;
+
+}

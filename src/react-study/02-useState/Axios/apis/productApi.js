@@ -19,3 +19,24 @@ export const getSearchProductApi = async (q) => {
   });
   return response;
 }
+
+
+// 상품 단건 등록 api
+// post요청 -> body 가 존제
+// 매개변수로  body 데이터를 받아온다
+/*  
+  {
+    name: "키보드",
+    price: 50000
+  }
+*/
+export const addProductApi = async (product) => {
+  const response = await instance.post("/add", product);
+  return response;
+
+}
+
+export const addBulkProductApi = async (products) => {
+  const response = await instance.post("/add/bulk", products);
+  return products;
+}
