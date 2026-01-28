@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { addBulkProductApi } from './apis/productApi';
-import { useToastStore } from '../../Zustand/store/toastStore';
+import { useToastStore } from '../Zustand/store/toastStore';
 
 export default function Axios05() {
     // 다건추가 => dto 모습이 [{},{}...]

@@ -6,10 +6,16 @@ import UserPostList from './UserPostList'
 export default function UserRouter() {
   return (
     <BrowserRouter>
-        <Routes>
-            <Route path="/" element={<Axios03 />} />
-            <Route path='/user/:userId/posts' element={<UserPostList />}/>
-        </Routes>
+      <Routes>
+        <Route 
+          path='/' 
+          element={<Axios03 />} 
+        />
+        <Route 
+          path='/user/:userId/posts'
+          element={<UserPostList />}
+        />
+      </Routes>
     </BrowserRouter>
   )
 }

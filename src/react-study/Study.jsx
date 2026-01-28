@@ -1,4 +1,5 @@
 import React from 'react'
+
 import UseState01 from './02-useState/UseState01';
 import UseState02 from './02-useState/UseState02';
 import UseState03 from './02-useState/UseState03';
@@ -33,17 +34,20 @@ import Zustand01 from './Zustand/Zustand01';
 import Zustand02 from './Zustand/Zustand02';
 import Zustand03 from './Zustand/Zustand03';
 import Zustand04 from './Zustand/Zustand04';
-import Axios01 from './02-useState/Axios/Axios01';
-import Axios02 from './02-useState/Axios/Axios02';
-import Axios03 from './02-useState/Axios/Axios03';
-import UserRouter from './02-useState/Axios/UserPostList/UserRouter';
-import Axios04 from './02-useState/Axios/Axios04';
-import Axios05 from './02-useState/Axios/Axios05';
+import Axios01 from './Axios/Axios01';
+import Axios02 from './Axios/Axios02';
+import Axios03 from './Axios/Axios03';
+import UserRouter from './Axios/UserPostList/UserRouter';
+import Axios04 from './Axios/Axios04';
+import Axios05 from './Axios/Axios05';
+import Axios03_old from './Axios/Axios03_old';
+import Axios06 from './Axios/Axios06';
 
 
 export default function Study() {
 
     const stateStudy = {
+        
         1: <UseState01 />,
         2: <UseState02 />,
         3: <UseState03 />,
@@ -84,7 +88,9 @@ export default function Study() {
         38: <UserRouter />,
         39: <Axios04 />,
         40: <Axios05 />,
+        41: <Axios03_old />,              
+        42: <Axios06 />,
 
     }
-  return stateStudy[40];
+  return stateStudy[42];
 }

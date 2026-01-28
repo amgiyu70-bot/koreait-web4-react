@@ -20,23 +20,42 @@ export const getSearchProductApi = async (q) => {
   return response;
 }
 
-
 // 상품 단건 등록 api
-// post요청 -> body 가 존제
-// 매개변수로  body 데이터를 받아온다
-/*  
-  {
-    name: "키보드",
-    price: 50000
-  }
-*/
+// post요청 -> body가 존재!
+// 매개변수로 body 데이터를 받아온다
 export const addProductApi = async (product) => {
+  /*
+    {
+      name: "키보드",
+      price: 50000
+    }
+  */
   const response = await instance.post("/add", product);
   return response;
-
 }
 
+// 다건추가
+// [{}, {}..]
 export const addBulkProductApi = async (products) => {
   const response = await instance.post("/add/bulk", products);
-  return products;
+  return response;
+}
+
+// 전체상품조회 api함수 정의 - get요청(/all)
+export const getAllProductsApi = async () => {
+  const response = await instance.get("/all");
+  return response;
+}
+
+// 삭제 api함수
+export const deleteProductApi = async (id) => {
+  const response = await instance.delete(`/${id}`);
+  return response;
+}
+
+// 업데이터 api 함수
+export const UpdateProductApi = async(id, productData) => {
+  const response = await instance.put(`/${id}`, productData);
+  return response;
+
 }

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useToastStore } from "../../Zustand/store/toastStore";
+import { useToastStore } from "../Zustand/store/toastStore";
 import { addProductApi } from "./apis/productApi";
 
 
