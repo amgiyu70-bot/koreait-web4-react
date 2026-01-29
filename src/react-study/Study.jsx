@@ -42,6 +42,11 @@ import Axios04 from './Axios/Axios04';
 import Axios05 from './Axios/Axios05';
 import Axios03_old from './Axios/Axios03_old';
 import Axios06 from './Axios/Axios06';
+import Test05 from './test/Test05';
+import ReactQuery01 from './ReactQuery/ReactQuery01';
+import ReactQuery02 from './ReactQuery/ReactQuery02';
+import ReactQuery03 from './ReactQuery/ReactQuery03';
+import ReactQuery04 from './ReactQuery/ReactQuery04';
 
 
 export default function Study() {
@@ -90,7 +95,12 @@ export default function Study() {
         40: <Axios05 />,
         41: <Axios03_old />,              
         42: <Axios06 />,
+        43: <Test05 />,
+        44: <ReactQuery01 />,
+        45: <ReactQuery02 />,
+        46: <ReactQuery03 />,
+        47: <ReactQuery04 />,
 
     }
-  return stateStudy[42];
+  return stateStudy[47];
 }

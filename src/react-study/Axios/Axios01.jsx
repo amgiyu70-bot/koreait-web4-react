@@ -1,4 +1,17 @@
 // axios 라이브러리
+/*
+  - fetch() 함수와 다른점
+  1. 400번 or 500번 에러를 에러로 생각하지 않음
+  기존에는 에러를 throw해줬어야 했음
+  -> axios 200대가 아니면 알아서 던져준다
+  2. 인터셉트 기능
+  -> 모든 요청 및 응답에 필터레이어 추가 가능
+
+  - 동일한 점
+  Promise 기반
+
+  npm install axios
+*/
 
 import axios from "axios";
 import { useEffect, useState } from "react"
