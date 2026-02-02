@@ -47,6 +47,7 @@ import ReactQuery01 from './ReactQuery/ReactQuery01';
 import ReactQuery02 from './ReactQuery/ReactQuery02';
 import ReactQuery03 from './ReactQuery/ReactQuery03';
 import ReactQuery04 from './ReactQuery/ReactQuery04';
+import ReactQuery05 from './ReactQuery/ReactQuery05';
 
 
 export default function Study() {
@@ -100,7 +101,8 @@ export default function Study() {
         45: <ReactQuery02 />,
         46: <ReactQuery03 />,
         47: <ReactQuery04 />,
+        48: <ReactQuery05 />,
 
     }
-  return stateStudy[47];
+  return stateStudy[48];
 }
