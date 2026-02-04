@@ -1,4 +1,8 @@
 // 상단 header navbar 일반메뉴들
+
+import Home from "../pages/Home/Home"
+import Signup from "../pages/Signup/Signup"
+
 // 
 export const  MENU_ITEM = [
     {
@@ -27,7 +31,7 @@ export const PUBLIC_ROUTES =[
     {
         id: "home",
         path: "/",
-        element: <>홈화면</>
+        element: <Home />
     },
     {
         id: "signin",
@@ -37,7 +41,7 @@ export const PUBLIC_ROUTES =[
     {
         id: "signup",
         path: "/signup",
-        element: <>회원가입</>
+        element: <Signup />
     }
 ]
 
