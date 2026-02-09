@@ -1,6 +1,8 @@
 // 상단 header navbar 일반메뉴들
 
 import Home from "../pages/Home/Home"
+import Mypage from "../pages/Mypage/Mypage"
+import Signin from "../pages/Signin/Signin"
 import Signup from "../pages/Signup/Signup"
 
 // 
@@ -36,7 +38,7 @@ export const PUBLIC_ROUTES =[
     {
         id: "signin",
         path: "/signin",
-        element: <>로그인화면</>
+        element: <Signin />
     },
     {
         id: "signup",
@@ -51,6 +53,6 @@ export const PROTECTED_ROUTES =[
     {
         id: "mypage",
         path: "/mypage",
-        element: <>마이페이지</>
+        element: <Mypage />
     }
 ]

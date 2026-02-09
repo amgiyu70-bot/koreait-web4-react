@@ -36,7 +36,7 @@ const errorMsg = css`
 `;
 
 export default function FormInput({
-    label, type, name, value, onChange, onKeyDown, placeholder, error
+    label, type, name, value, onChange, onKeyDown, placeholder, error, ref
 }) {
   return (
     <div css={contaniner}>
@@ -50,9 +50,17 @@ export default function FormInput({
             onChange={onChange}
             onKeyDown={onKeyDown}
             placeholder={placeholder}
+            ref={ref}
 
         />
-        {error && <div css={errorMsg}>{error}</div>}       
+        {
+          
+        error && <div css={errorMsg}>{error}</div>
+        /*
+
+        error ? <div css={errorMsg}>{error}</div>: ""
+        */
+        }       
     </div>
   )
 }

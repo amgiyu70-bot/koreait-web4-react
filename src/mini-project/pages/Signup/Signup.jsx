@@ -4,8 +4,8 @@ import * as s from "./styles";
 import only_logo from "../../../assets/only_logo.svg";
 import FormInput from "./components/FormInput";
 import { useForm } from "../../hooks/useForm";
-import { useState } from "react";
-import { useSignupMutation } from "./hooks/useSignup";
+import { useRef, useState } from "react";
+import { useSignupMutation, useSignupValidation } from "./hooks/useSignup";
 
 export default function Signup() {
   const {formVal, handleChange} = useForm({
@@ -18,9 +18,51 @@ export default function Signup() {
   // [{},{},{}] => {}
   const [errors, setErrors] = useState({});
   const { mutate, isPending } = useSignupMutation();
+  const { newError, isAllValidate } = useSignupValidation(formVal);
+
+  // 아이디 input에서 enter -> 비밀번호 input으로 focus , useRef, current 
+  
+    const usernameRef = useRef(null);
+    const passwordRef = useRef(null);
+    const passwordConfirmRef = useRef(null);
+    const nameRef = useRef(null);
+    const emailRef = useRef(null);
+
+    const inputkeyDown = (e) => {
+      
+      const inp1= usernameRef.current;
+      const inp2= passwordRef.current;
+      const inp3= passwordConfirmRef.current;
+      const inp4= nameRef.current;
+      const inp5= emailRef.current;
+      const chk = e.target.name;
+
+      //console.log(chk);
+      const key = e.key;
+      if (key !=="Enter") {
+          return;
+      }
+      
+      if (chk === "username") {  
+          inp2.focus();  
+      } else if (chk === "password") {
+          inp3.focus();  
+      } else if (chk === "passwordConfirm") {
+          inp4.focus();
+      } else if (chk === "name") {
+          inp5.focus();
+      } else if (chk === "email") {
+          handleSubmit();
+      }
+          
+    }  
 
   const handleSubmit = () => {
     if(isPending) return;
+    if(!isAllValidate) {
+      setErrors(newError);
+      return;
+    }
     // FE의 validation
 
     // spread - rest문법
@@ -62,6 +104,9 @@ export default function Signup() {
             onChange={handleChange}
             placeholder="4~20자 영문 소문자, 숫자"
             error={errors.username}
+            ref={usernameRef}
+            onKeyDown={inputkeyDown}
+            
           />
           <FormInput
             type="password"
@@ -71,6 +116,8 @@ export default function Signup() {
             onChange={handleChange}
             placeholder="비밀번호를 입력하세요"
             error={errors.password}
+            ref={passwordRef}
+            onKeyDown={inputkeyDown}
           />
           <FormInput
             type="password"
@@ -79,6 +126,9 @@ export default function Signup() {
             value={formVal.passwordConfirm}
             onChange={handleChange}
             placeholder="비밀번호를 다시 입력하세요"
+            error={errors.passwordConfirm}
+            ref={passwordConfirmRef}
+            onKeyDown={inputkeyDown}
           />
           <FormInput
             type="text"
@@ -88,6 +138,8 @@ export default function Signup() {
             onChange={handleChange}
             placeholder="이름을 입력하세요"
             error={errors.name}
+            ref={nameRef}
+            onKeyDown={inputkeyDown}
           />
           <FormInput
             type="email"
@@ -97,6 +149,8 @@ export default function Signup() {
             onChange={handleChange}
             placeholder="sample@email.com"
             error={errors.email}
+            ref={emailRef}
+            onKeyDown={inputkeyDown}
           />
           <button 
             css={s.btn} 

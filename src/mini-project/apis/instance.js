@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useAuthStore } from "../stores/authStore";
 
 const instance = axios.create({
     baseURL: "http://localhost:8080",
@@ -25,5 +26,61 @@ instance.interceptors.request.use(
         return Promise.reject(error);
     }
 );
+
+instance.interceptors.response.use(
+    (res) => res,  // 200번대 응답은 그냥 패스
+    async (error) => {
+        // 서버에서 내려준 에러 or 그냥 에러
+        // accessToken 유효시간 3분
+        // 사용자는 3분이라고 느끼지 못하게
+        // 월래 사용자가 가려고 했던 요청을 다시보내줘야 함
+        const originalReq = error.config; // 원요청의 설정
+
+        if (
+            error.response.status === 401
+            && error.response.data.error === "ACCESS_TOKEN_EXPIRED"
+            // 이미 함전 인터셈터로 보내진 효청인지 확인용
+            // 무한 재시도 방지
+            && originalReq._retry
+        ) {
+            
+            //  임으로 _retry라는 필드를 나중에 추가할거임
+            originalReq._retry = true;
+            try {
+                // 쿠키에 refresh토큰이 있으므로
+                // Authorization 헤더 없이 요청
+                const url = "http://localhost:8080/auth/refresh";
+                const response = await axios.post(url, {}, {withCredentials: true});
+
+                // 서버에서 받아온 새로운 accessToken
+                const newAccessToken = response.data;
+                // Zustand의 전역훌을 컴포넌트가 아닌곳에서 호출할 때
+                // 컴포넌트 생명주기와 무관한 곳이기 때문에 별도이 방식 서줘야 합
+                // -> getState(); 써줘야 함
+                const { setToken } = useAuthStore.getState();
+                setToken(newAccessToken); // 업데이트
+
+                // 기존실패 요청의 헤더 교체
+                originalReq.headers.Authorization = `Bearer ${newAccessToken}`;
+
+                // 원래 요청한 곳으로 새 토큰으로 다시 실행
+                return instance(originalReq);
+                
+            } catch (refreshError) {
+                // refeshToken마다 만료된 경우
+                localStorage.removeItem("accessToken");
+                // 로그인창으로 보낼지? (선택)
+                //window.location.href = "./signin";
+                return Promise.reject(refreshError);
+            }
+        }
+
+        // 그양 401, 400 ... 처리 - fi 밖 / 토큰이 없거나, 권한이 없을 때
+        console.log("응답 인터센터에서 에러 발생");
+        console.log(error);
+        return Promise.reject(error);
+
+    }
+)
 
 export  default instance;
