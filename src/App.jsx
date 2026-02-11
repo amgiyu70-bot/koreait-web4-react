@@ -19,7 +19,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Study from "./react-study/Study";
 import MyToast from "./react-study/Zustand/MyToast";
-import Main from "./mini-project/Main";
+import Check from "./check";
+//import Main from "./mini-project/Main";
 /*
 // 쿼리클라이언트 - get요청 결과 데이터를 전역상태로 들고 있음
 const queryClient = new QueryClient({
@@ -45,7 +46,8 @@ function App() {
     //  <Study />
     //</QueryClientProvider>
    
-    <Main />
+    //<Main />
+    <Check />
   )
 }
 
