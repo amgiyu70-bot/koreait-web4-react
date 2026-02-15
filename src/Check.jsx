@@ -8,5 +8,5 @@ export default function Check() {
          2: <MyProject />,
  
      }
-   return chkList[1];
+   return chkList[2];
 }
