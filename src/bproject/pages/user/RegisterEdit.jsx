@@ -1,6 +1,6 @@
 
 
-export default function Register_edit() {
+export default function RegisterEdit() {
   return (
     	<div id="container_wr">	
 		<div id="container_edit">

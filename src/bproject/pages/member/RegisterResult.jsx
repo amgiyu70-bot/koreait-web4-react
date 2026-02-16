@@ -1,6 +1,6 @@
-import React from 'react'
 
-export default function Register_result() {
+
+export default function RegisterResult() {
   return (
     <div id="container">
         <h2 id="container_title"><span title="회원가입 완료">회원가입 완료</span></h2>

@@ -95,6 +95,7 @@ export default function Side() {
 			<li className="li_empty">위시리스트 없음</li>
 			</ul>
 		</aside>
+		
 
 	    		<button type="button" className="con_close"><i className="fa fa-times-circle" aria-hidden="true"></i><span className="sound_only">위시리스트 닫기</span></button>
 	    	</div>

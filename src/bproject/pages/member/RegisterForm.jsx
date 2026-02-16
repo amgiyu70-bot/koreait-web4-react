@@ -1,6 +1,5 @@
-import React from 'react'
 
-export default function Register_form() {
+export default function RegisterForm() {
   return (
     <div id="container">
         <h2 id="container_title"><span title="회원 가입">회원 가입</span></h2>
