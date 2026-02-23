@@ -16,9 +16,9 @@
 //import UseState06_me from "./react-study/02-useState/UseState06_me";
 //import UseState06 from "./react-study/02-useState/UseState06";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Study from "./react-study/Study";
-import MyToast from "./react-study/Zustand/MyToast";
+//import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+//import Study from "./react-study/Study";
+//import MyToast from "./react-study/Zustand/MyToast";
 import Check from "./check";
 //import Main from "./mini-project/Main";
 /*
@@ -33,7 +33,7 @@ const queryClient = new QueryClient({
   }
 });
 */
-const queryClient = new QueryClient();
+//const queryClient = new QueryClient();
 
 function App() {
 

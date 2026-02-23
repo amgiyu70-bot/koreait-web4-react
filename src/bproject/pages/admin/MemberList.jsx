@@ -1,101 +1,166 @@
+import { useState } from "react";
+//import { importForm } from "../../hooks/importForm";
+import { getMemberList, getMemberSearch } from "./js/adminMain";
+import { Link } from "react-router-dom";
 
 
 export default function MemberList({title}) {
+    /*
+    const {formVal, handleChange} = importForm({
+    sfl: "",
+    stx: "",
+    sst: "mb_datetime",
+    sod: "desc",
+    page: "1"
+    });
+    */
+
+  
+  
+    const [inputVal, setInputVal] = useState("");
+    const [stx, setStx] = useState("");
+    const [sfl, setSfl] = useState("mb_id");
+    const [page, setPage] = useState(1);
+    const [search, setSearch] = useState(false);    
+
+    const onClickSearch = () => {
+        setStx(inputVal);
+        setSearch(true);
+        setPage(1);
+    }
+
+    const allPageList = () => {
+         setInputVal("");
+         setStx("");
+         setPage(1);
+
+    }
+
+    const pageList = (v) => {
+        setPage(v);
+    }
+        
+    const {data: member} = getMemberList(stx, sfl, page);
+
+    //const totalCnt = member?.mode[0]?.total;
+    const total = (member && member?.mode[0]?.total> 0) ? member?.mode[0]?.total:0;
+    const total_page = (member && member?.mode[0]?.total_page> 0)? member?.mode[0]?.total_page: 0;
+    
+    // console.log(member);
+
+
+    const results = [];
+    for ( let i = 1; i <= total_page; i++)   {
+        
+            if (i===page) {
+            results.push(                
+    
+            <strong class="pg_current">{i}</strong>                
+            );
+            } else {
+            results.push( <span class="pg_page fcolor01 cusorP"  onClick={() => pageList(i)}>{i}</span>);
+            }
+
+    }
+ 
+
+    
+
   return (
     <>
 	<h1 id="container_title">{title}</h1>
     <div className="container_wr">
         <div className="local_ov01 local_ov">
-            <a href="/shop/adm/member_list.php" className="ov_listall">전체목록</a> <span className="btn_ov01"><span className="ov_txt">총회원수 </span><span className="ov_num"> 4명 </span></span>
-            <a href="?sst=mb_intercept_date&amp;sod=desc&amp;sfl=&amp;stx=" className="btn_ov01" data-tooltip-text="차단된 순으로 정렬합니다.
-    전체 데이터를 출력합니다."> <span className="ov_txt">차단 </span><span className="ov_num">0명</span></a>
-            <a href="?sst=mb_leave_date&amp;sod=desc&amp;sfl=&amp;stx=" className="btn_ov01" data-tooltip-text="탈퇴된 순으로 정렬합니다.
-    전체 데이터를 출력합니다."> <span className="ov_txt">탈퇴 </span><span className="ov_num">0명</span></a>
+            <button className="bt_listall" onClick={allPageList}>전체목록</button> <span className="btn_ov01">
+            <span className="ov_txt">총회원수 </span><span className="ov_num"> {total}명 </span></span>
         </div>
 
-        <form id="fsearch" name="fsearch" className="local_sch01 local_sch" method="get">
+        
 
-            <label htmlFor="sfl" className="sound_only">검색대상</label>
-            <select name="sfl" id="sfl">
+        <span className="local_sch01">
+            <input type="hidden" name="sst" value="mb_datetime"   />
+            <input type="hidden" name="sod" value="desc"  />
+            <input type="hidden" name="page" value={page}  onChange={(e) => setPage(e.target.value)} />
+
+            <select name="sfl" id="sfl" onChange={(e) => setSfl(e.target.value)}> 
                 <option value="mb_id">회원아이디</option>
-                <option value="mb_nick">닉네임</option>
                 <option value="mb_name">이름</option>
-                <option value="mb_level">권한</option>
                 <option value="mb_email">E-MAIL</option>
                 <option value="mb_tel">전화번호</option>
                 <option value="mb_hp">휴대폰번호</option>
-                <option value="mb_point">포인트</option>
-                <option value="mb_datetime">가입일시</option>
-                <option value="mb_ip">IP</option>
                 <option value="mb_recommend">추천인</option>
             </select>
-            <label htmlFor="stx" className="sound_only">검색어<strong className="sound_only"> 필수</strong></label>
-            <input type="text" name="stx" value="" id="stx" required="" className="required frm_input" />
-            <input type="submit" className="btn_submit" value="검색" />
-
-        </form>
-
-        <form name="fmemberlist" id="fmemberlist" action="./member_list_update.php"  method="post">
-            <input type="hidden" name="sst" value="mb_datetime" />
-            <input type="hidden" name="sod" value="desc" />
-            <input type="hidden" name="sfl" value="" />
-            <input type="hidden" name="stx" value="" />
-            <input type="hidden" name="page" value="1" />
-            <input type="hidden" name="token" value="" />
+            <input 
+                type="text" 
+                name="stx"  
+                id="stx"  
+                className="required frm_input" 
+                value={inputVal}
+                onChange={(e) => setInputVal(e.target.value)}
+            />
+            <input type="submit" className="btn_submit" value="검색" onClick={onClickSearch} />
+            </span>            
 
             <div className="tbl_head01 tbl_wrap">
                 <table>
                     <caption>회원관리 목록</caption>
                     <thead>
                         <tr>
-                            <th scope="col" id="mb_list_chk" >
-                                <label htmlFor="chkall" className="sound_only">회원 전체</label>
-                                <input type="checkbox" name="chkall" value="1" id="chkall"  />
-                            </th>
-                            <th scope="col" id="mb_list_id" colspan="2"><a href="http://127.0.0.1/shop/adm/member_list.php?sst=mb_id&amp;sod=asc&amp;sfl=&amp;stx=&amp;sca=&amp;page=1">아이디</a></th>
-
-                            <th scope="col" id="mb_list_name"><a href="http://127.0.0.1/shop/adm/member_list.php?sst=mb_name&amp;sod=asc&amp;sfl=&amp;stx=&amp;sca=&amp;page=1">이름</a></th>
-
-                            <th scope="col" id="mb_list_name"><a href="http://127.0.0.1/shop/adm/member_list.php?sst=mb_name&amp;sod=asc&amp;sfl=&amp;stx=&amp;sca=&amp;page=1">전화번호</a></th>
-
-                            <th scope="col" id="mb_list_name"><a href="http://127.0.0.1/shop/adm/member_list.php?sst=mb_name&amp;sod=asc&amp;sfl=&amp;stx=&amp;sca=&amp;page=1">휴대번호</a></th>
-
-                            <th scope="col" id="mb_list_name"><a href="http://127.0.0.1/shop/adm/member_list.php?sst=mb_name&amp;sod=asc&amp;sfl=&amp;stx=&amp;sca=&amp;page=1">이메일</a></th>
-
-                            <th scope="col" id="mb_list_name"><a href="http://127.0.0.1/shop/adm/member_list.php?sst=mb_name&amp;sod=asc&amp;sfl=&amp;stx=&amp;sca=&amp;page=1">포인트</a></th>
+                           
+                            <th scope="col" id="mb_list_id" >아이디</th>
+                            <th scope="col" id="mb_list_name">이름</th>
+                            <th scope="col" id="mb_list_name">전화번호</th>
+                            <th scope="col" id="mb_list_name">휴대번호</th>
+                            <th scope="col" id="mb_list_name">이메일</th>
+                            <th scope="col" id="mb_list_name">포인트</th>
+                            <th scope="col" id="mb_list_name">등록일</th>
                             <th scope="col"  id="mb_list_mng">관리</th>
                         </tr>
                     </thead>
                     <tbody>
 
-                        <tr className="bg0">
-                            <td headers="mb_list_chk" className="td_chk" rowspan="2">
-                                <input type="hidden" name="mb_id[0]" value="chk01" id="mb_id_0" />
-                            </td>
-                            <td className="td_name sv_use">chk01 </td>
-                            <td className="td_mbname">chk01 </td>
-                            <td className="td_tel">010-1111-1111</td>
-                            <td className="td_tel">010-1111-1111</td>
-                            <td className="td_date">26-02-13</td>
-                            <td className="td_date">26-02-13</td>
-                            <td className="td_num"><a href="point_list.php?sfl=mb_id&amp;stx=chk01">1,200</a></td>
-                            <td className="td_mng td_mng_s"><a href="./member_form.php?sst=&amp;sod=&amp;sfl=&amp;stx=&amp;page=&amp;w=u&amp;mb_id=chk01" class="btn btn_03">수정</a></td>
+                        {
+						member && member?.mode[0]?.total === '0'
+						? <tr>
+							<td colSpan="8" className="empty_table">자료가 없습니다.</td>
+						</tr>
+						: member?.data?.map((u, idx) =>{
+						return(
+						<tr className={`bg${idx}`}>
+							<td className="td_mbid">{u.mb_id}</td>
+							<td className="td_mbname">{u.mb_name}</td>
+							<td>{u.mb_tel}</td>
+							<td >{u.mb_hp}</td>
+							<td >{u.mb_email}</td>
+							<td >{u.mb_point}</td>
+							<td >{u.mb_datetime}</td>
+							<td ><a href="./member_form.php?sst=&amp;sod=&amp;sfl=&amp;stx=&amp;page=&amp;w=u&amp;mb_id=chk01" class="btn btn_03">수정</a></td>
+						</tr>
+						)
+					})}
 
-                        </tr>
 
                     </tbody>
                 </table>
             </div>
 
             <div className="btn_fixed_top">
-                <input type="submit" name="act_button" value="선택수정"  className="btn btn_02" />
-                <input type="submit" name="act_button" value="선택삭제"  className="btn btn_02" />
-                <a href="./member_form.php" id="member_add" className="btn btn_01">회원추가</a>
-
+                <Link to="" id="member_add" className="btn btn_01">회원추가</Link>
             </div>
+        {
+         total_page> 1     
+        ?   <nav class="pg_wrap">
+            <span class="pg">
+                <span class="pg_page pg_start cusorP" onClick={() => pageList(1)}>처음</span>
+                {results}
+                 <span class="pg_page pg_end cusorP"  onClick={() => pageList(total_page)}>맨끝</span>
+            </span>
+        </nav>
+       
+        : ""
+          }    
 
 
-        </form>
     </div>
     </>
   )
