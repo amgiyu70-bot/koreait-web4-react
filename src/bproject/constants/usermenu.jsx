@@ -64,7 +64,7 @@ export const PUBLIC_ROUTES =[
     } ,
     {
         id: "itemlist",
-        path: "/itemlist",
+        path: "/itemlist/*",
         element: <Itemlist />
     },
     {

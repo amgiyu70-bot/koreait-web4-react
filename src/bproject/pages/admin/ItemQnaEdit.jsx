@@ -1,6 +1,8 @@
+import { useParams } from "react-router-dom";
 
 
 export default function ItemQnaEdit({title}) {
+    console.log(useParams());
   return (
     <>
 	<h1 id="container_title">{title}</h1>

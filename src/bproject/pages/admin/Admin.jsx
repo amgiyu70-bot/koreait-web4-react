@@ -16,7 +16,7 @@ export default function Admin({title}) {
 		return <h1>로딩중</h1>	
 	}
 
-	console.log(member);
+	//console.log(member);
 
 	// 전체 회원
 	const {data: memberCnt} = getMemberTotalCnt();

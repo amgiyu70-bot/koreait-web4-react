@@ -99,6 +99,8 @@ border:1px solid #558ab7 !important;
 .hd_login>li.login a {color:#3a8afd;padding:10px;border-radius:3px;border:1px solid #3a8afd}
 .hd_login>li a {color:#fff}
 .hd_login>li.shop_login {margin-top:-15px}
+.hd_login>li.shop_cart {margin-top:-10px}
+.hd_login>li.shop_logout {margin-top:-10px; padding-left: 10px;}
 .hd_login .fa-shopping-cart {font-size:1.6em}
 .hd_login .count {display:inline-block;position:absolute;top:-5px;right:-10px;line-height:12px;padding:0 5px;border-radius:10px;background:#ff1a21;color:#fff;min-width:16px;height:14px;font-size:0.85em}
 
@@ -173,7 +175,7 @@ box-shadow:0 2px 5px rgba(0,0,0,0.2)}
 #wrapper {}
 #container_wr:after {display:block;visibility:hidden;clear:both;content:""}
 #container_wr {margin:0 auto;zoom:1}
-#aside {float:right;width:235px;padding:0;height:100%;margin:20px 0 20px 20px}
+#aside {position:absolute;top:0;left:0;margin:0 10px 0 0;width:265px}
 
 /* aside + wrapper */
 #side_pd {position:relative;border:1px solid #dde7e9;background:#fff;border-radius:3px;margin-bottom:15px}
@@ -1304,3 +1306,7 @@ html.no-overflowscrolling #sc_coupon_frm, html.no-overflowscrolling #od_coupon_f
 .chk_box input[type="radio"]:checked + label {color:#305af9}
 .chk_box input[type="radio"]:checked + label span:before {width:7px;height:7px;background:#305af9;content:'';position:absolute;top:3px;left:3px;border-radius:50%}
 
+.btn_member_mn .profile_name {display:inline-block;max-width:70px;line-height:34px;vertical-align: bottom;text-overflow:ellipsis;overflow:hidden;white-space:nowrap; color:#3a8afd; font-size: 11pt;}
+
+.fcolor01 {color: white;}
+.cusorP{cursor: pointer;}

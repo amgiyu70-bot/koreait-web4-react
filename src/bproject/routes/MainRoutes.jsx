@@ -6,6 +6,7 @@ import LoginRoute from "./LoginRoute";
 //import UserPage from "../layouts/user/UserPage";
 //import AdminPage from "../layouts/admin/AdminPage";
 import { lazy } from "react";
+import AdminRoute from "./AdminRoute";
 
 const isAdminPage = true;
 
@@ -23,10 +24,7 @@ export default function MainRoutes() {
 
   return (    
      <Routes>       
-      {
-      !isAdminPage
-      ? 
-      (<Route  element={<UserPage />} >
+    <Route  element={<UserPage />} >
           {PUBLIC_ROUTES.map((route)=>{
             return (
               <Route 
@@ -49,24 +47,20 @@ export default function MainRoutes() {
             })}
           </Route>        
         </Route>   
-      )     
-
-        : 
-        (<Route element={<AdminPage />}>
-          {ADMI_ROUTES.map((route)=> {
-            return (
-              <Route
-                key={route.key}
-                path={route.path}
-                element={route.element}
-              />
-            )
-          })}
+        <Route element={<AdminRoute />}>
+          <Route element={<AdminPage />}>
+              {ADMI_ROUTES.map((route)=> {
+                return (
+                  <Route
+                    key={route.key}
+                    path={route.path}
+                    element={route.element}
+                  />
+                )
+              })}
+            </Route>
         </Route>
-        )
-        
-        }
-
+       
          {/* 404 처리 */}
         <Route path="*" element={<Navigate to="/" replace />}/>
       </Routes>

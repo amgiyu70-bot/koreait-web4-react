@@ -4,34 +4,16 @@ export default function Main() {
   return (
     <div  className="">
     <div id="container">
-		<div id="aside">            
-	
-		<nav id="gnb">
-			<h2>쇼핑몰 카테고리</h2>
-			<ul id="gnb_1dul">
-			</ul>
-		</nav>
+		<div id="aside">   	
 
             <section id="side_pd">
-                <h2><a href="http://localhost/shop/shop/listtype.php?type=4">인기상품</a></h2>
+                <h2><a href="">인기상품</a></h2>
                 
 			<p className="sct_noitem">등록된 상품이 없습니다.</p>
             </section>
-
-
-                    </div>
+        </div>
                         {/* .shop-content 시작 */}
         <div className="shop-content is_index">
-                        {/* 글자크기 조정 display:none 되어 있음 시작 */}
-            <div id="text_size">
-                <button className="no_text_resize" onclick="font_resize('container', 'decrease');">작게</button>
-                <button className="no_text_resize" onclick="font_default('container');">기본</button>
-                <button className="no_text_resize" onclick="font_resize('container', 'increase');">크게</button>
-            </div>
-            {/* } 글자크기 조정 display:none 되어 있음 끝*/}
-{/* 메인이미지 시작 */}
-{/* } 메인이미지 끝*/}
-
 {/* 히트상품 시작 */}
 <section id="idx_hit" className="sct_wrap">
     <header>

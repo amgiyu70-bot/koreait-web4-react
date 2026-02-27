@@ -19,7 +19,8 @@ export const ADMI_ROUTES =[
     {
         id: "admin",
         path: "/admin",
-        element: <Admin title="관리자메인" />
+        element: <Admin title="관리자메인" />,
+        code: ""
     },
     {
         id: "memberlist",
@@ -28,7 +29,7 @@ export const ADMI_ROUTES =[
     },
     {
         id: "memberedit",
-        path: "/admin/memberedit",
+        path: "/admin/memberedit/*",
         element: <MemberEdit title="회원수정" />
     },
     {
@@ -53,7 +54,7 @@ export const ADMI_ROUTES =[
     },
     {
         id: "itemedit",
-        path: "/admin/itemedit",
+        path: "/admin/itemedit/*",
         element: <ItemEdit title="상품수정" />
     },
     {
@@ -63,7 +64,7 @@ export const ADMI_ROUTES =[
     },
     {
         id: "itemqnaedit",
-        path: "/admin/itemqnaedit",
+        path: "/admin/itemqnaedit/*",
         element: <ItemQnaEdit title="상품문의 수정" />
     },
     {
@@ -73,7 +74,7 @@ export const ADMI_ROUTES =[
     },
     {
         id: "itemuseedit",
-        path: "/admin/itemuseedit",
+        path: "/admin/itemuseedit/*",
         element: <ItemUseEdit title="상품후기 수정" />
     },
     {
@@ -88,7 +89,7 @@ export const ADMI_ROUTES =[
     },
     {
         id: "categoryedit",
-        path: "/admin/categoryedit",
+        path: "/admin/categoryedit/*",
         element: <CategoryEdit title="상품분류 수정" />
     },
 ]

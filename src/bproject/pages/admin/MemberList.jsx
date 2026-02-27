@@ -20,20 +20,23 @@ export default function MemberList({title}) {
     const [inputVal, setInputVal] = useState("");
     const [stx, setStx] = useState("");
     const [sfl, setSfl] = useState("mb_id");
-    const [page, setPage] = useState(1);
-    const [search, setSearch] = useState(false);    
+    const [selSfl, setSelSfl] = useState("");
+    const [page, setPage] = useState(1);  
+    
+    const onChageValue = (e) => {
+       setSelSfl(e.target.value);
+    }
 
     const onClickSearch = () => {
         setStx(inputVal);
-        setSearch(true);
         setPage(1);
+        setSfl(selSfl);
     }
 
     const allPageList = () => {
          setInputVal("");
          setStx("");
          setPage(1);
-
     }
 
     const pageList = (v) => {
@@ -52,21 +55,17 @@ export default function MemberList({title}) {
     const results = [];
     for ( let i = 1; i <= total_page; i++)   {
         
-            if (i===page) {
-            results.push(                
-    
-            <strong class="pg_current">{i}</strong>                
+        if (i===page) {
+            results.push(   
+            <strong className="pg_current">{i}</strong>                
             );
-            } else {
-            results.push( <span class="pg_page fcolor01 cusorP"  onClick={() => pageList(i)}>{i}</span>);
-            }
+        } else {
+            results.push( <span className="pg_page fcolor01 cusorP"  onClick={() => pageList(i)}>{i}</span>);
+        }
 
     }
- 
 
-    
-
-  return (
+    return (
     <>
 	<h1 id="container_title">{title}</h1>
     <div className="container_wr">
@@ -75,14 +74,13 @@ export default function MemberList({title}) {
             <span className="ov_txt">총회원수 </span><span className="ov_num"> {total}명 </span></span>
         </div>
 
-        
-
         <span className="local_sch01">
             <input type="hidden" name="sst" value="mb_datetime"   />
             <input type="hidden" name="sod" value="desc"  />
+            <input type="hidden" name="sfl" value={sfl}  />
             <input type="hidden" name="page" value={page}  onChange={(e) => setPage(e.target.value)} />
 
-            <select name="sfl" id="sfl" onChange={(e) => setSfl(e.target.value)}> 
+            <select name="selSfl" id="selSfl" onChange={onChageValue}> 
                 <option value="mb_id">회원아이디</option>
                 <option value="mb_name">이름</option>
                 <option value="mb_email">E-MAIL</option>
@@ -106,7 +104,6 @@ export default function MemberList({title}) {
                     <caption>회원관리 목록</caption>
                     <thead>
                         <tr>
-                           
                             <th scope="col" id="mb_list_id" >아이디</th>
                             <th scope="col" id="mb_list_name">이름</th>
                             <th scope="col" id="mb_list_name">전화번호</th>
@@ -134,7 +131,7 @@ export default function MemberList({title}) {
 							<td >{u.mb_email}</td>
 							<td >{u.mb_point}</td>
 							<td >{u.mb_datetime}</td>
-							<td ><a href="./member_form.php?sst=&amp;sod=&amp;sfl=&amp;stx=&amp;page=&amp;w=u&amp;mb_id=chk01" class="btn btn_03">수정</a></td>
+							<td ><Link to={`/admin/memberedit/${u.mb_idx}/${sfl}/${page}/${stx}`} className="btn btn_03">수정</Link></td>
 						</tr>
 						)
 					})}
@@ -145,7 +142,7 @@ export default function MemberList({title}) {
             </div>
 
             <div className="btn_fixed_top">
-                <Link to="" id="member_add" className="btn btn_01">회원추가</Link>
+                <Link to="/admin/memberform" id="member_add" className="btn btn_01">회원추가</Link>
             </div>
         {
          total_page> 1     
@@ -163,5 +160,5 @@ export default function MemberList({title}) {
 
     </div>
     </>
-  )
+    )
 }

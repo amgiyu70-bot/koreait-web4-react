@@ -1,73 +1,131 @@
-import React from 'react'
+import { useState } from "react";
+import { getCateList } from "./js/adminMain";
+import { Link } from "react-router-dom";
+
 
 export default function CategoryList({title}) {
+
+    const [inputVal, setInputVal] = useState("");
+    const [stx, setStx] = useState("");
+    const [sfl, setSfl] = useState("ca_name");
+    const [page, setPage] = useState(1);     
+
+    const onClickSearch = () => {
+        setStx(inputVal);
+        setPage(1);
+    }
+    const allPageList = () => {
+         setInputVal("");
+         setStx("");
+         setPage(1);
+
+    }
+    const pageList = (v) => {
+        setPage(v);
+    }
+    const {data: cate, isLoing, isError, error} = getCateList(stx, sfl, page); 
+    const total = (cate && cate?.mode[0]?.total> 0) ? cate?.mode[0]?.total:0;
+    const total_page = (cate && cate?.mode[0]?.total_page> 0)? cate?.mode[0]?.total_page: 0;
+
+    if (isLoing) {
+        return <h1>로딩중</h1>
+    }
+
+    if (isError) {
+        console.log(error.message);
+        return <h1>에러발생</h1>
+    }
+
+    const results = [];
+    for ( let i = 1; i <= total_page; i++)   {
+        
+        if (i===page) {
+             results.push( 
+            <strong className="pg_current">{i}</strong>                
+            );
+        } else {
+            results.push( <span className="pg_page fcolor01 cusorP"  onClick={() => pageList(i)}>{i}</span>);
+        }
+
+    }
+
   return (
     <>
 	<h1 id="container_title">{title}</h1>
     <div className="container_wr">
         <div className="local_ov01 local_ov">
-            <a href="/shop/adm/shop_admin/itemuselist.php" className="ov_listall">전체목록</a> <span className="btn_ov01"><span className="ov_txt"> 전체 후기내역</span><span className="ov_num"> 1건</span></span>
+            <button className="bt_listall" onClick={allPageList}>전체목록</button> <span className="btn_ov01">
+            <span className="ov_txt">총수 </span><span className="ov_num"> {total}개 </span></span>
         </div>
 
-        <form name="flist" className="local_sch01 local_sch">
-            <input type="hidden" name="page" value="1" />
-            <input type="hidden" name="save_stx" value="" />
-
-            <label htmlFor="sca" className="sound_only">분류선택</label>
-            <select name="sca" id="sca">
-                <option value="">전체분류</option>
-                <option value="10">남성복</option>
+        <span className="local_sch01">
+            <input type="hidden" name="sst" value="ca_id"   />
+            <input type="hidden" name="sod" value="desc"  />
+            <input type="hidden" name="page" value={page}  onChange={(e) => setPage(e.target.value)} />
+           <select name="sfl" id="sfl" onChange={(e) => setSfl(e.target.value)}> 
+                <option value="ca_name">분류명</option>
             </select>
+           <input 
+                type="text" 
+                name="stx"  
+                id="stx"  
+                className="required frm_input" 
+                value={inputVal}
+                onChange={(e) => setInputVal(e.target.value)}
+            />
+            <input type="submit" className="btn_submit" value="검색" onClick={onClickSearch} />
+        </span>       
 
-            <label htmlFor="sfl" className="sound_only">검색대상</label>
-            <select name="sfl" id="sfl">
-                <option value="it_name">분류명</option>
-            </select>
-
-            <label htmlFor="stx" className="sound_only">검색어<strong className="sound_only"> 필수</strong></label>
-            <input type="text" name="stx" id="stx" value=""  className="frm_input required" />
-            <input type="submit" value="검색" className="btn_submit" />
-
-        </form>
-
-        <form name="fitemuselist" method="post" action="./itemuselistupdate.php" onsubmit="return fitemuselist_submit(this);" autocomplete="off">
-            <input type="hidden" name="sca" value="" />
-            <input type="hidden" name="sst" value="is_id" />
-            <input type="hidden" name="sod" value="desc" />
-            <input type="hidden" name="sfl" value="a.it_name" />
-            <input type="hidden" name="stx" value="" />
-            <input type="hidden" name="page" value="1" />
-
-            <div className="tbl_head01 tbl_wrap" id="itemuselist">
-                <table>
-                    <caption>분류 목록</caption>
-                    <thead>
-                        <tr>
-                            <th scope="col"><a href="http://127.0.0.1/shop/adm/shop_admin/itemuselist.php?sca=&amp;sst=it_name&amp;sod=asc&amp;sfl=a.it_name&amp;stx=&amp;page=1">분류코드</a></th>
-                            <th scope="col"><a href="http://127.0.0.1/shop/adm/shop_admin/itemuselist.php?sca=&amp;sst=mb_name&amp;sod=asc&amp;sfl=a.it_name&amp;stx=&amp;page=1">분류명</a></th>
-                            <th scope="col"><a href="http://127.0.0.1/shop/adm/shop_admin/itemuselist.php?sca=&amp;sst=is_subject&amp;sod=asc&amp;sfl=a.it_name&amp;stx=&amp;page=1">상품갯수</a></th>
-                            <th scope="col"><a href="http://127.0.0.1/shop/adm/shop_admin/itemuselist.php?sca=&amp;sst=is_confirm&amp;sod=asc&amp;sfl=a.it_name&amp;stx=&amp;page=1">관리</a></th>
-                            <th scope="col">관리</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr className="bg0">
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <a href="./categoryform.php?w=u&amp;ca_id=10&amp;sst=&amp;sod=&amp;sfl=&amp;stx=&amp;page=" class="btn btn_02">수정</a>             
-				                <a href="./categoryformupdate.php?w=d&amp;ca_id=10&amp;sst=&amp;sod=&amp;sfl=&amp;stx=&amp;page=" onclick="return delete_confirm(this);" class="btn btn_02">삭제</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="btn_fixed_top">
-                    <a href="./categoryform.php" id="cate_add" class="btn btn_01">분류 추가</a>
-                </div>
+        <div className="tbl_head01 tbl_wrap" id="itemuselist">
+            <table>
+                <caption>분류 목록</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">분류코드</th>
+                        <th scope="col">분류명</th>
+                        <th scope="col">상품갯수</th>
+                        <th scope="col">관리</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {
+                    cate && cate?.mode[0]?.total === '0'
+                    ? <tr>
+                        <td colSpan="8" className="empty_table">자료가 없습니다.</td>
+                    </tr>
+                    : cate?.data?.map((c, idx) =>{
+                        const {ca_id, ca_name, caCnt} = c;
+                    return(
+                    <tr className={`bg${idx}`} key={idx}>
+                        <td>{ca_id}</td>
+                        <td>{ca_name}</td>
+                        <td>{caCnt}</td>
+                        <td>
+                            <Link to={`/admin/categoryedit/${ca_id}/${sfl}/${page}/${stx}`} className="btn btn_03">수정</Link>
+                            &nbsp;
+                            <Link to={`/admin/categoryedit/${ca_id}/${sfl}/${page}/${stx}`} className="btn btn_03">삭제</Link>
+                        </td>
+                    </tr>                    
+						)
+				})}
+                </tbody>
+            </table>
+            <div class="btn_fixed_top">
+                <Link to="/admin/categoryform" id="member_add" className="btn btn_01">분류추가</Link>
             </div>
-        </form>
+            {
+         total_page> 1     
+        ?   <nav class="pg_wrap">
+            <span class="pg">
+                <span class="pg_page pg_start cusorP" onClick={() => pageList(1)}>처음</span>
+                {results}
+                 <span class="pg_page pg_end cusorP"  onClick={() => pageList(total_page)}>맨끝</span>
+            </span>
+        </nav>
+       
+        : ""
+          }  
+        </div>
     </div>
     </>
   )

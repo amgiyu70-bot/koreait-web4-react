@@ -3,7 +3,8 @@ import axios from "axios";
 
 
 const instance = axios.create({
-  baseURL: "http://127.0.0.1/react"
+  //baseURL: "http://tour.amiweb.kr/react"
+  baseURL: "http://gnbiz8888.liodesign.kr/react"
 });
 
 
@@ -65,11 +66,11 @@ export const getItemQnaMainList = () => {
 
 // 회원 리스트
 export const getMemberList = (stx, sfl, page) => {
-  console.log(stx);
+  //console.log(stx);
   return useQuery({
-    queryKey: ["getMemberList",stx, page],
+    queryKey: ["getMemberList",stx, sfl, page],
     queryFn: async () => {      
-       const response = await instance.get(`/admin/memberList?sfl=mb_id&stx=${stx}&sfl=${sfl}&page=${page}`);
+       const response = await instance.get(`/admin/memberList?stx=${stx}&sfl=${sfl}&page=${page}`);
        return response?.data;
     },
     refetchOnMount: false,   // 마운트 시 재요청 금지
@@ -89,7 +90,7 @@ export const getMemberSearch = (stx, sfl, page) => {
     // 컨트롤러 이름, userId or contentId...
     queryKey: ["getMemberSearch", stx, sfl, page],
     queryFn: async () => {
-      const url = "http://127.0.0.1/react/admin/memberList";
+      const url = "http://tour.amiweb.kr/react/admin/memberList";
       const res = await axios.get(url, {
         params: { stx: stx }
       });
@@ -106,16 +107,80 @@ export const getMemberSearch = (stx, sfl, page) => {
 
 // 상품 qna 리스트
 export const getItemQnaList = (stx, sfl, page) => {
-  console.log(stx);
+  //console.log(`/admin/itemQnaList?stx=${stx}&sfl=${sfl}&page=${page}`);
   return useQuery({
     queryKey: ["getItemQnaList",stx, page],
     queryFn: async () => {      
-       const response = await instance.get(`/admin/itemQnaList?sfl=mb_id&stx=${stx}&sfl=${sfl}&page=${page}`);
+       const response = await instance.get(`/admin/itemQnaList?stx=${stx}&sfl=${sfl}&page=${page}`);
        return response?.data;
     },
     refetchOnMount: false,   // 마운트 시 재요청 금지
     refetchOnWindowFocus: false, // 포커스 시 재요청 금지
     refetchOnReconnect: false,   // 네트워크 재연결 시 재요청 금지,
     retry: 0
-  });
+  }); 
+}
+
+
+// 상품 후기 리스트
+export const getItemUseList = (stx, sfl, page) => {
+  return useQuery({
+    queryKey: ["getItemUseList",stx, page],
+    queryFn: async () => {      
+       const response = await instance.get(`/admin/itemUseList?stx=${stx}&sfl=${sfl}&page=${page}`);
+       return response?.data;
+    },
+    refetchOnMount: false,   // 마운트 시 재요청 금지
+    refetchOnWindowFocus: false, // 포커스 시 재요청 금지
+    refetchOnReconnect: false,   // 네트워크 재연결 시 재요청 금지,
+    retry: 0
+  }); 
+}
+
+
+// 상품 카테고리
+export const getCateList = (stx, sfl, page) => {
+  return useQuery({
+    queryKey: ["getCateList",stx, page],
+    queryFn: async () => {      
+       const response = await instance.get(`/admin/categoryList?stx=${stx}&sfl=${sfl}&page=${page}`);
+       return response?.data;
+    },
+    refetchOnMount: false,   // 마운트 시 재요청 금지
+    refetchOnWindowFocus: false, // 포커스 시 재요청 금지
+    refetchOnReconnect: false,   // 네트워크 재연결 시 재요청 금지,
+    retry: 0
+  }); 
+}
+
+
+// 상품 리스트
+export const getItemList = (stx, sfl, page) => {
+  return useQuery({
+    queryKey: ["getItemList",stx, page],
+    queryFn: async () => {      
+       const response = await instance.get(`/admin/itemList?stx=${stx}&sfl=${sfl}&page=${page}`);
+       return response?.data;
+    },
+    refetchOnMount: false,   // 마운트 시 재요청 금지
+    refetchOnWindowFocus: false, // 포커스 시 재요청 금지
+    refetchOnReconnect: false,   // 네트워크 재연결 시 재요청 금지,
+    retry: 0
+  }); 
+}
+
+
+// 주문 리스트
+export const getOrderList = (stx, sfl, page) => {
+  return useQuery({
+    queryKey: ["getOrderList",stx, sfl, page],
+    queryFn: async () => {      
+       const response = await instance.get(`/admin/orderList?stx=${stx}&sfl=${sfl}&page=${page}`);
+       return response?.data;
+    },
+    refetchOnMount: false,   // 마운트 시 재요청 금지
+    refetchOnWindowFocus: false, // 포커스 시 재요청 금지
+    refetchOnReconnect: false,   // 네트워크 재연결 시 재요청 금지,
+    retry: 0
+  }); 
 }

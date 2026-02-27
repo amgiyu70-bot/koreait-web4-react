@@ -1,3 +1,6 @@
+# 민간함 정보 - github에 올라가지 않도록
+.env
+
 # Logs
 logs
 *.log
