@@ -18,7 +18,7 @@ export default function OrderList({title}) {
     const [sfl, setSfl] = useState(sflL);
     const [stx, setStx] = useState(stxL);
     const [page, setPage] = useState(pageL);  
-    const [selSfl, setSelSfl] = useState("");
+    const [selSfl, setSelSfl] = useState(sflL);
     //const [startDate, setStartDate] = useState(new Date());
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
@@ -154,10 +154,9 @@ export default function OrderList({title}) {
             <input type="hidden" name="sod" value="desc"  />
             <input type="hidden" name="sfl" value={sfl}  />
             <input type="hidden" name="page" value={page}  onChange={(e) => setPage(e.target.value)} />
-
            
-             <select name="selSfl" id="selSfl" onChange={onChageValue}> 
-                <option value="od_id" selected="selected">주문번호</option>
+             <select name="selSfl" id="selSfl"  onChange={onChageValue}> 
+                <option value="o_id" selected="selected">주문번호</option>
                 <option value="mb_id">회원 ID</option>
                 <option value="od_name">주문자</option>
                 <option value="od_tel">주문자전화</option>
