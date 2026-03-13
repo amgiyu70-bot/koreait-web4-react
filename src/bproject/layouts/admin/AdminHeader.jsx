@@ -2,28 +2,31 @@ import { Link, useLocation } from 'react-router-dom';
 import './css/admin.css';
 import { useState } from 'react';
 import { useAuthStore } from '../../stores/authStore';
+import { AiOutlineSetting } from "react-icons/ai";
 
 export default function AdminHeader() {
    
     const locations = useLocation();
-    const lastSegment = locations.pathname.split('/').filter(Boolean).pop();
+    //const lastSegment = locations.pathname.split('/').filter(Boolean).pop();
+    const lastSegment = locations.pathname.split('/');    
 
     let menuL ="";
-    if (lastSegment=="admin") {
+    if (lastSegment[2]==undefined || !lastSegment[2]) {
         menuL = "100100";
-    } else if (lastSegment=="memberlist") {
+    } else if (lastSegment[2]=="memberlist" || lastSegment[2]=="memberedit" || lastSegment[2]=="memberform") {  
         menuL = "200100";
-    } else if (lastSegment=="orderlist") {
+    } else if (lastSegment[2]=="orderlist" || lastSegment[2]=="orderform") {
         menuL = "300100";
-    } else if (lastSegment=="category") {
+    } else if (lastSegment[2]=="category" || lastSegment[2]=="categoryform" || lastSegment[2]=="categoryedit") {
         menuL = "300200";
-    } else if (lastSegment=="itemlist") {
+    } else if (lastSegment[2]=="itemlist" || lastSegment[2]=="itemform" || lastSegment[2]=="itemedit") {
         menuL = "300300";
-    } else if (lastSegment=="itemqna") {
+    } else if (lastSegment[2]=="itemqna" || lastSegment[2]=="itemqnaedit") { 
         menuL = "300400";
-    } else if (lastSegment=="itemuse") {
+    } else if (lastSegment[2]=="itemuse" || lastSegment[2]=="itemuseedit") {
         menuL = "300500";
     }     
+
 
     const [isChanged, setIsChanged] = useState(menuL[0]);      
     const chkMenu = (v) => {

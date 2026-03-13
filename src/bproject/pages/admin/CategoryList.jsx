@@ -1,10 +1,19 @@
 import { useState } from "react";
-import { getCateList } from "./js/adminMain";
-import { Link } from "react-router-dom";
+import { getCateDel, getCateList } from "./js/adminMain";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 
 export default function CategoryList({title}) {
 
+
+    // 경로
+    const location = useLocation();
+    const reData = location.state;    
+    const mode = reData?.mode;
+   // console.log(mode);
+
+    const nav = useNavigate();
     const [inputVal, setInputVal] = useState("");
     const [stx, setStx] = useState("");
     const [sfl, setSfl] = useState("ca_name");
@@ -23,7 +32,7 @@ export default function CategoryList({title}) {
     const pageList = (v) => {
         setPage(v);
     }
-    const {data: cate, isLoing, isError, error} = getCateList(stx, sfl, page); 
+    const {data: cate, isLoing, isError, error} = getCateList(stx, sfl, page, mode); 
     const total = (cate && cate?.mode[0]?.total> 0) ? cate?.mode[0]?.total:0;
     const total_page = (cate && cate?.mode[0]?.total_page> 0)? cate?.mode[0]?.total_page: 0;
 
@@ -47,6 +56,36 @@ export default function CategoryList({title}) {
             results.push( <span className="pg_page fcolor01 cusorP"  onClick={() => pageList(i)}>{i}</span>);
         }
 
+    }
+
+    const cartDel = async(ca_id) => {
+        if (window.confirm('상품분류를 삭제 하시겠습니까?')) {
+             const arr = new Array(); 
+            arr['ca_id'] = ca_id;
+            arr['mode'] = 'del';
+            const obj = { ...arr };
+
+            
+            try {
+                const response = await getCateDel(obj);
+
+                //console.log(response?.error);
+               // console.log(ca_id);                
+
+                if (response?.error!=0) {
+                    toast.error(response?.msg);
+                } else {
+                    toast.success(response?.msg);
+                }
+                const dataToPass = { mode: ca_id };  
+                nav('/admin/category',  { state: dataToPass }); 
+               
+               
+                return "";
+            } catch(error) {
+                    toast.error("실행 에러");
+            }
+        }
     }
 
   return (
@@ -101,9 +140,9 @@ export default function CategoryList({title}) {
                         <td>{ca_name}</td>
                         <td>{caCnt}</td>
                         <td>
-                            <Link to={`/admin/categoryedit/${ca_id}/${sfl}/${page}/${stx}`} className="btn btn_03">수정</Link>
+                            <Link to={`/admin/categoryedit`}  state={{ ca_id: ca_id }}className="btn btn_03">수정</Link>
                             &nbsp;
-                            <Link to={`/admin/categoryedit/${ca_id}/${sfl}/${page}/${stx}`} className="btn btn_03">삭제</Link>
+                            <a href="javascript:void(0)" onClick={() =>cartDel(ca_id)} className="btn btn_03">삭제</a>
                         </td>
                     </tr>                    
 						)

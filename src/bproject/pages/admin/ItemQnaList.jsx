@@ -1,17 +1,28 @@
 import { useState } from "react";
-import { getItemQnaList } from "./js/adminMain";
+import { getItemQnaDel, getItemQnaList } from "./js/adminMain";
 import parse from 'html-react-parser';
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import noImage from "../../img/no_image.gif";
+import { toast } from "react-toastify";
 
 export default function ItemQnaList({title}) {
 
+     // 경로
+    const nav = useNavigate();
+    const location = useLocation();
+    const reData = location.state;    
+    const sflL = reData?.sfl? reData?.sfl : "it_name";
+    const pageL = reData?.page ? reData?.page : 1;
+    const stxL = reData?.stx? reData?.stx : "";
+    let times = (reData?.times)? reData?.times: "";   
+    
+
     const [inputVal, setInputVal] = useState("");
-    const [stx, setStx] = useState("");
-    const [sfl, setSfl] = useState("it_name");
-    const [page, setPage] = useState(1);
-    const [search, setSearch] = useState(false);    
-	const [isVisible, setIsVisible] = useState(false);
+    const [sfl, setSfl] = useState(sflL);
+    const [stx, setStx] = useState(stxL);
+    const [page, setPage] = useState(pageL); 
+
+    const dataToPass = { sfl: sfl, stx: stx, page: page, times: Date.now() };
 
     const onClickSearch = () => {
         setStx(inputVal);
@@ -30,7 +41,7 @@ export default function ItemQnaList({title}) {
         setPage(v);
     }
         
-    const {data: qna} = getItemQnaList(stx, sfl, page);
+    const {data: qna} = getItemQnaList(stx, sfl, page, times);
     console.log(qna);
   
     const total = (qna && qna?.mode[0]?.total> 0) ? qna?.mode[0]?.total:0;
@@ -38,17 +49,17 @@ export default function ItemQnaList({title}) {
     
     // console.log(qna);
 
-
     const results = [];
     for ( let i = 1; i <= total_page; i++)   {
-        if (i===page) {
-        results.push(                
-
-        <strong className="pg_current">{i}</strong>                
-        );
+        
+        if (i===parseInt(page)) {
+            results.push(   
+            <strong className="pg_current">{i}</strong>                
+            );
         } else {
-        results.push( <span className="pg_page fcolor01 cusorP"  onClick={() => pageList(i)}>{i}</span>);
+            results.push( <span className="pg_page fcolor01 cusorP"  onClick={() => pageList(i)}>{i}</span>);
         }
+
     }
 
     // 체크된 아이템을 담을 배열
@@ -74,7 +85,7 @@ export default function ItemQnaList({title}) {
     // ------------------------------
     const checkItemHandler = (check, id) => {
        // console.log(check)
-         console.log(checkItems)
+         //console.log(checkItems)
         if (check) {
             setCheckItems((prev) => [...prev, id]) // 불변성을 지키기 위한 원본 배열을 복사 후 추가
         } else {
@@ -83,8 +94,71 @@ export default function ItemQnaList({title}) {
             // 현재 checkItems의 배열에서 해당 id를 제외한 새로운 배열 반환
         }
     }
+
+    const [showItem, setShowItem] = useState({});
+
+    const toggleItem = (id) => {
+        setShowItem(prev => ({
+        ...prev,
+        [id]: !prev[id] // 클릭한 ID의 상태만 반전
+        }));
+    };
+
+
+    // -----------------
+    // 선택 삭제 STR
+    //------------------
+
+    const selectDel = async () => {
+        // console.log(checkItems[0]);
+        const checkboxes = document.getElementsByName('chkname');
+        /// console.log(checkboxes);
+        let chkCnt =0;
+        let chkVal = "";
+        for (let i=0; i<checkboxes.length; i++) {
+
+            if (checkboxes[i].checked) {                
+                if (chkCnt>0) chkVal +=",";
+                chkVal += checkItems[chkCnt];
+                chkCnt++;
+            }            
+        }
+
+         console.log(chkVal);
+
+        if (chkCnt==0) {
+            alert('삭제할 상품을 하나이상 선택해주세요.');
+            return "";
+        }
+        
+        const arr = new Array(); 
+        arr['mode'] = 'sel';
+        arr['chkVal'] = chkVal;
+        const obj = { ...arr };
+        try {
+            const response = await getItemQnaDel(obj);
+           // console.log(response);            
+
+            if (response?.error!=0) {
+                toast.error(response?.msg);
+            } else {
+                toast.success(response?.msg);
+            }
+            setCheckItems([]);
+            nav('/admin/itemqna',  { state: dataToPass });
+
+        } catch(error) {
+                toast.error("실행 에러");
+        }
+               
+
+        // console.log(chkCnt);
+    }
+    // -----------------
+    // 선택 삭제 END
+    //------------------
     
-  return (
+    return (
     <>
 	<h1 id="container_title">{title}</h1>
     <div className="container_wr">
@@ -149,36 +223,45 @@ export default function ItemQnaList({title}) {
                             <td className="td_chk">
                                 <input 
                                     type="checkbox"   
+                                    name="chkname"
                                     key={q.iq_id} 
                                     id={q.iq_id} 
+                                    value={q.iq_id} 
                                     onChange={(e) => checkItemHandler(e.target.checked, q.iq_id)}
                                     checked={checkItems.includes(q.iq_id)}
                                 />
-                                <input type="hidden" name="iq_id[0]" value="1" />
                             </td>
-                           <td className="td_left"><img src={q.it_img? `/data/shop/${q.it_img}`:noImage} width="50" height="50" alt="" title="" /> {q.it_name}</td>
+                           <td className="td_left" style={{width:"200px"}}><img src={q.it_img? `http://gnbiz8888.liodesign.kr/react/upload/${q.it_img}`:noImage} width="50" height="50" alt="" title="" /> {q.it_name}</td>
                             <td className="td_left">
-                                {q.iq_subject} <span className="tit_op cusorP" onClick={() => setIsVisible(!isVisible)}> 열기 </span>
+                                {q.iq_subject} <span className="tit_op cusorP" onClick={() => toggleItem(idx)} > 열기 </span>
                                 
-                            {isVisible &&  <div id={`qa_div${idx}`}  >
+                            {showItem[idx] && <div id={`qa_div${idx}`}  >
                                     <div className="qa_q">
-                                        <strong>문의내용</strong>
-
+                                      <br />  
+                                    <strong>문의내용</strong>
+                                    <br />
                                     {parse(q.iq_question)}
+                                        <br />
                                     </div>
                                     <div className="qa_a">
+                                        <br />
                                         <strong>답변</strong>
-                                        답변이 등록되지 않았습니다.
+                                        <br />
+                                        {q?.iq_answer? parse(q.iq_answer):"답변이 등록되지 않았습니다."}
+                                        
                                     </div>
                                 </div>
-                            }
+                             }
                             </td>
+                        
                         <td className="td_name">{q.mb_id}</td>
                             <td className="td_name">{q.iq_name}</td>
                             <td>{q.iq_time}</td>
-                            <td className="td_boolean">답변</td>
+                            <td className="td_boolean">
+                                {q?.iq_answer? "답변됨":"없음"}
+                            </td>
                             <td className="td_mng td_mng_s">
-                                <Link to={`/admin/itemqnaedit/${q.iq_id}/${sfl}/${page}/${stx}`} className="btn btn_03">수정</Link>
+                                <Link to="/admin/itemqnaedit" state={{ iq_id: q.iq_id, sfl: sfl, page: page, stx: stx }} className="btn btn_03">수정</Link>
                             </td>
                         </tr>
 						)
@@ -189,7 +272,7 @@ export default function ItemQnaList({title}) {
             </div>
 
             <div className="btn_fixed_top">
-                <input type="submit" name="act_button" value="선택삭제" onclick="document.pressed=this.value" className="btn btn_02" />
+                <input type="button" name="act_button" value="선택삭제" onClick={selectDel} className="btn btn_02" />
             </div>
 
             {

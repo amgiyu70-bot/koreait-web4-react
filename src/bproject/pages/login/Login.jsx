@@ -3,6 +3,7 @@ import { importForm } from '../../hooks/importForm'
 import { useLogoinMuation } from '../../hooks/useLogin';
 import { toast } from "react-toastify";
 import { useAuthStore } from '../../stores/authStore';
+import { useRef } from 'react';
 
 export default function Login() {
 	const { mbID } = useAuthStore();
@@ -15,10 +16,30 @@ export default function Login() {
         password: ""
 
 	 });
+	const mbidRef = useRef(null);
+	const passwordRef = useRef(null);
+	const inputkeyDown = (e) => {
+      
+		const inp1= mbidRef.current;
+		const inp2= passwordRef.current;
+     	const chk = e.target.name;
+		const key = e.key;
+		if (key !=="Enter") {
+			return;
+		}
+
+		if (chk === "mbid") {  
+			inp2.focus();  
+		} else if (chk === "password") {
+			handleLogin();  
+		} 
+	}
 
 	const {isPending, mutate} = useLogoinMuation();
 
 	const handleLogin = () => {
+		//console.log(formVal);
+		//return;
         const {mbid, password} = formVal;
         if (!mbid) {
             toast.error("아이디를 입력해주세요");
@@ -70,6 +91,8 @@ export default function Login() {
                 name="mbid"
                 value={formVal.mbid}
                 onChange={handleChange}
+				ref={mbidRef}
+				onKeyDown={inputkeyDown}
 			/>
 			
 			<input 
@@ -78,9 +101,11 @@ export default function Login() {
 				className="frm_input required" 
 				size="20" 
 				name="password"
+				placeholder="비밀번호"
                 value={formVal.password}
                 onChange={handleChange}
-				placeholder="비밀번호"
+				ref={passwordRef}
+				onKeyDown={inputkeyDown}
 			 />
 			<button 			
 				className="btn_submit"

@@ -7,7 +7,7 @@ export default function AdminRoute() {
     const { isAdmin } = useAuthStore();
   
     // 권한이 없다면
-    if(!isAdmin) {
+    if(isAdmin!=1) {
       // 라우터라이브러리에서 제공하는 컴포넌트
       // url 이동(변경)만 담당
       // replace: /mypage로 이동한 히스토리를 /signin으로 대체

@@ -1,11 +1,13 @@
 import { useState } from "react";
 //import { importForm } from "../../hooks/importForm";
 import { getMemberList, getMemberSearch } from "./js/adminMain";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 export default function MemberList({title}) {
-    /*
+   
+   /*
     const {formVal, handleChange} = importForm({
     sfl: "",
     stx: "",
@@ -14,23 +16,41 @@ export default function MemberList({title}) {
     page: "1"
     });
     */
-
-  
-  
+    
+    
+    
+    // 2 검색시 캐시 무효화 해라
+    const queryClient = useQueryClient();
+     // 경로
+    const location = useLocation();
+    const reData = location.state;   
+    const sflL = reData?.sfl? reData?.sfl : "mb_id";
+    const pageL = reData?.page ? reData?.page : 1;
+    const stxL = reData?.stx? reData?.stx : "";    
+    let times = (reData?.times)? reData?.times: "";   
+      
     const [inputVal, setInputVal] = useState("");
-    const [stx, setStx] = useState("");
-    const [sfl, setSfl] = useState("mb_id");
+    const [sfl, setSfl] = useState(sflL);
+    const [stx, setStx] = useState(stxL);
+    const [page, setPage] = useState(pageL);  
     const [selSfl, setSelSfl] = useState("");
-    const [page, setPage] = useState(1);  
+    const [search, setSearch] = useState("");
+
+   
     
     const onChageValue = (e) => {
-       setSelSfl(e.target.value);
+       setSfl(e.target.value);
     }
 
     const onClickSearch = () => {
         setStx(inputVal);
         setPage(1);
-        setSfl(selSfl);
+       // times = Date.now();
+       setSearch(Date.now());
+      //  setSfl(times);
+        // 2 검색시 캐시 무효화 해라
+      //  queryClient.invalidateQueries({queryKey: ["getMemberList",  stx, page, search]});
+        //console.log(sfl + ' / ' + times +' / '+stx);
     }
 
     const allPageList = () => {
@@ -42,20 +62,20 @@ export default function MemberList({title}) {
     const pageList = (v) => {
         setPage(v);
     }
-        
-    const {data: member} = getMemberList(stx, sfl, page);
+    
+    const {data: member} = getMemberList(stx, sfl, page, search);
 
     //const totalCnt = member?.mode[0]?.total;
     const total = (member && member?.mode[0]?.total> 0) ? member?.mode[0]?.total:0;
     const total_page = (member && member?.mode[0]?.total_page> 0)? member?.mode[0]?.total_page: 0;
     
-    // console.log(member);
+   //  console.log(member);
 
 
     const results = [];
     for ( let i = 1; i <= total_page; i++)   {
         
-        if (i===page) {
+        if (i===parseInt(page)) {
             results.push(   
             <strong className="pg_current">{i}</strong>                
             );
@@ -79,8 +99,9 @@ export default function MemberList({title}) {
             <input type="hidden" name="sod" value="desc"  />
             <input type="hidden" name="sfl" value={sfl}  />
             <input type="hidden" name="page" value={page}  onChange={(e) => setPage(e.target.value)} />
+             <input type="hidden" name="search" value={search}  onChange={(e) => setSearch(e.target.value)} />
 
-            <select name="selSfl" id="selSfl" onChange={onChageValue}> 
+            <select name="sfl" id="sfl" onChange={(e) => setSfl(e.target.value)}> 
                 <option value="mb_id">회원아이디</option>
                 <option value="mb_name">이름</option>
                 <option value="mb_email">E-MAIL</option>
@@ -131,7 +152,7 @@ export default function MemberList({title}) {
 							<td >{u.mb_email}</td>
 							<td >{u.mb_point}</td>
 							<td >{u.mb_datetime}</td>
-							<td ><Link to={`/admin/memberedit/${u.mb_idx}/${sfl}/${page}/${stx}`} className="btn btn_03">수정</Link></td>
+							<td ><Link to="/admin/memberedit" className="btn btn_03" state={{ mb_id: u.mb_id, sfl: sfl, page: page, stx: stx }}>수정</Link></td>
 						</tr>
 						)
 					})}

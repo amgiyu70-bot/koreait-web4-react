@@ -11,7 +11,8 @@ import Orderform from '../pages/user/Orderform';
 import Orderview from '../pages/user/Orderview';
 import Mypage from '../pages/user/Mypage';
 import RegisterEdit from '../pages/user/RegisterEdit';
-
+import Test01 from '../pages/user/Test01';
+import OrderList from '../pages/user/OrderList';
 // 
 export const  MENU_ITEM = [
     {
@@ -64,13 +65,18 @@ export const PUBLIC_ROUTES =[
     } ,
     {
         id: "itemlist",
-        path: "/itemlist/*",
+        path: "/itemlist/:id",
         element: <Itemlist />
     },
     {
         id: "itemview",
-        path: "/itemview",
+        path: "/itemview/:id",
         element: <Itemview />
+    },
+    {
+        id: "test01",
+        path: "/test01",
+        element: <Test01 />
     }
 ]
 
@@ -89,13 +95,18 @@ export const PROTECTED_ROUTES =[
     },
     {
         id: "orderform",
-        path: "/orderform",
+        path: "/orderform/:id",
         element: <Orderform />
     },
     {
         id: "orderview",
-        path: "/orderview",
+        path: "/orderview/:id",
         element: <Orderview />
+    },
+    {
+        id: "orderlist",
+        path: "/orderlist",
+        element: <OrderList />
     },
     {
         id: "regedit",

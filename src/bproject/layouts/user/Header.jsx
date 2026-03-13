@@ -7,11 +7,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 import logImg from "../../img/logo_img.png";
 
-import { AiOutlineLogin, AiOutlineLogout, AiOutlineUser, AiOutlineShoppingCart, AiOutlineBars  } from "react-icons/ai";
+import { AiOutlineLogin, AiOutlineLogout, AiOutlineUser, AiOutlineShoppingCart, AiOutlineBars, AiOutlineCrown  } from "react-icons/ai";
+import { getCartCnt } from '../../pages/user/js/userQuery';
 
 
 export default function Header() {
-	const {mbID, mbName} = useAuthStore();
+	const {mbID, mbName, isAdmin} = useAuthStore();
+
+	const {data: cCnt} = getCartCnt(mbID);
+
+	//console.log(cCnt);
 
 	const  navigate = useNavigate();
   // 로그인산태에 따라 로그인 / 로그아웃 서로 다르게 보여야  함
@@ -22,10 +27,14 @@ export default function Header() {
 		logout();
 		navigate("/") // 홈화면으로 
 	}
+	const winOen = () => {
+		window.open('/admin/');
+	}
+
 
   return (
-    <div id="hd" >
-    <h1 id="hd_h1">그누보드5</h1>
+    <div id="hd"  >
+    <h1 id="hd_h1">쇼핑몰</h1>
     <div id="skip_to_container"><a href="#container">본문 바로가기</a></div>
 	
     <div id="hd_wrapper">
@@ -37,15 +46,16 @@ export default function Header() {
 			 ? 	<li className="login"><Link to="/login">로그인{mbID}</Link></li>				
 			: <>
 				
-				<li class="shop_login">
+				<li className="shop_login">
 				<AiOutlineUser color="white" size="1.5rem" />
 				<span className="btn_member_mn">					
 					<span className="profile_name">{mbName}<span className="fcolor01">님</span></span>
 					<i className="fa fa-angle-down" aria-hidden="true"></i>
+					{isAdmin==1? <a href="javascript:void(0)" onClick={winOen} ><AiOutlineCrown size="1.5rem" title="관리자" /></a>:"" }
 				</span>	
 				</li>				
-				<li className="shop_cart"><AiOutlineShoppingCart color="white" size="1.5rem" />
-					<span className="sound_only">장바구니</span><span className="count">0</span>
+				<li className="shop_cart"><Link to="/Cart"><AiOutlineShoppingCart color="white" size="1.5rem" />
+					<span className="sound_only">장바구니</span><span className="count" id="cartCnt">{cCnt}</span></Link>
 				</li>
 				<li className="shop_logout cusorP" onClick={handleLogout}><AiOutlineLogout color="white" size="1.5rem" /></li>
 			  </>		
@@ -54,15 +64,15 @@ export default function Header() {
     </div>
 
     <div id="hd_menu">
-    	<Link to="/itemlist"><button type="button" id="menu_open"><AiOutlineBars color="white" /> 전체상품</button></Link>
+    	<Link to="/itemlist/0" state={{page: 1}}><button type="button" id="menu_open"><AiOutlineBars color="white" /> 전체상품</button></Link>
 		
 		<div id="category_all_bg"></div>
 		<ul className="hd_menu">
-			<li><Link to="/itemlist/1">히트상품</Link></li>
-			<li><Link to="/itemlist/2">추천상품</Link></li>
-			<li><Link to="/itemlist/3">최신상품</Link></li>
-			<li><Link to="/itemlist/4">인기상품</Link></li>
-			<li><Link to="/itemlist/5">할인상품</Link></li>
+			<li><Link to="/itemlist/1" state={{page: 1}}>히트상품</Link></li>
+			<li><Link to="/itemlist/2" state={{page: 1}}>추천상품</Link></li>
+			<li><Link to="/itemlist/3" state={{page: 1}}>최신상품</Link></li>
+			<li><Link to="/itemlist/4" state={{page: 1}}>인기상품</Link></li>
+			<li><Link to="/itemlist/5" state={{page: 1}}>할인상품</Link></li>
 		</ul>		 
     </div> 
 </div>

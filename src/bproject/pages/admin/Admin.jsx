@@ -177,7 +177,7 @@ export default function Admin({title}) {
 						: qna?.map((q, idx) =>{
 						return(
 						<tr className={`bg${idx}`}>
-                            <td className="td_left"><img src={q.it_img? `/data/shop/${q.it_img}`:noImage} width="50" height="50" alt="" title="" /> {q.it_name}</td>
+                            <td className="td_left"><img src={q.it_img? `http://gnbiz8888.liodesign.kr/react/upload/${q.it_img}`:noImage} width="50" height="50" alt="" title="" /> {q.it_name}</td>
                             <td className="td_left">
                                 {q.iq_subject} <span className="tit_op cusorP" onClick={() => setIsVisible(!isVisible)}> 열기 </span>
                                

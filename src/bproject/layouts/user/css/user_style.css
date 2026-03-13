@@ -277,7 +277,7 @@
 .sct_40 .sct_ct_wrap {position:relative}
 .sct_40 .sct_ct_wrap:after {display:block;visibility:hidden;clear:both;content:""}
 .sct_40 .sct_star {margin:10px 0 5px}
-.sct_40 .sct_txt {font-size:1.1em;margin:10px 0;padding-bottom:10px}
+.sct_40 .sct_txt {font-size:1.1em;margin:10px 0;padding-bottom:10px; width:100px;}
 .sct_40 .sct_txt a{font-weight:600;font-size:1.2em}
 .sct_40 .sct_basic {margin-bottom:5px;color:#6e7f88}
 .sct_40 .sct_cost {position:absolute;right:200px;top:15px;font-size:1.35em;font-weight:bold}
@@ -402,8 +402,8 @@
 .smt_40 .sct_clear {clear:both}
 .smt_40 .sct_img {position:relative;text-align:center}
 .smt_40 .sct_star {margin:10px 0 5px}
-.smt_40 .sct_txt {display:block;margin:5px 0;font-size:1.1em}
-.smt_40 .sct_cost {margin:5px 0;font-size:1.25em;font-weight:bold}
+.smt_40 .sct_txt {display:block;margin:5px 0;font-size:1.1em; width: 100px;}
+.smt_40 .sct_cost {margin:5px 0;font-size:1.25em;font-weight:bold;  width: 100px;}
 
 
 /* 관련상품 목록 스킨 10 */
@@ -624,7 +624,7 @@ background:url('img/select_arrow.png') no-repeat 96% 50%/* 화살표 아이콘 �
 #sit_info {display:inline-flex;position:relative;width:100%;min-height:600px;margin-top:20px;margin-bottom:30px;border:1px solid #e8e8e8;background:#fff}
 #sit_info:after {display:block;visibility:hidden;clear:both;content:""}
 
-#sit_tab {width:928px;display:table-cell}
+#sit_tab {width:100%;display:table-cell}
 #sit_tab:after {display:block;visibility:hidden;clear:both;content:""}
 #sit_tab .tab_tit {border-bottom:1px solid #e8e8e8;background:#fff;padding:0 10px}
 #sit_tab .tab_tit:after {display:block;visibility:hidden;clear:both;content:""}
@@ -748,12 +748,11 @@ background:url('img/select_arrow.png') no-repeat 96% 50%/* 화살표 아이콘 �
 .sit_qaa_done {display:inline-block;height:30px;line-height:30px;background:#f6bb42;color:#fff;padding:0 8px;margin-right:10px;font-size:12px;font-weight:normal;border-radius:3px}
 .sit_qaa_yet {display:inline-block;height:30px;line-height:30px;background:#ccd1d9;color:#fff;padding:0 8px;margin-right:10px;font-size:12px;font-weight:normal;border-radius:3px}
 
-.sit_qa_con {display:none;clear:both}
-.sit_qa_p {margin:10px 0;background:#f3f3f3;line-height:1.5em}
+.sit_qa_con {clear:both}
+.sit_qa_p {margin:50px 0 10px 0;background:#f3f3f3;line-height:1.5em}
 .sit_qa_p .qa_alp {position:absolute;top:13px;left:15px;font-size:2em;color:#000}
 .sit_qa_qaa {padding:15px 20px;padding-left:50px;position:relative;min-height:50px;border-top:1px solid #fff}
 .sit_qa_qaq {padding:15px 20px;padding-left:50px;position:relative;min-height:50px}
-.sit_qa_con textarea {display:none}
 .sit_qa_cmd {text-align:right}
 
 .sit_qa_pw {display:none;position:absolute;top:30px;left:175px;padding:10px;width:348px;border:1px solid #000;background:#fff;text-align:center}
@@ -1302,3 +1301,24 @@ box-shadow:0px 1px 6px 0 #dedede
 #profile .my_profile_img img {border-radius:50%}
 #profile .profile_img img {border-radius:50%}
 #profile .profile_name .sv_wrap {font-weight:bold;text-align:left}
+#smt_4 img{width:80px; height: 80px;}
+#smt_4 .slick-arrow.slick-prev {
+width:20px;height:20px;text-indent:-9999em;background:url('/img/shop/btn_prev.png') no-repeat;
+cursor:pointer;
+position: relative;
+margin-left: 200px;
+margin-top: -20px;
+background-color: #000;
+color: #000;
+z-index: 99999999999;
+}
+
+#smt_4 .slick-arrow.slick-next {
+width:20px;height:20px;text-indent:-9999em;background:url('/img/shop/btn_next.png') no-repeat;
+cursor:pointer;
+margin-right: 60px;
+margin-top: -168px;
+background-color: #000;
+color: #000;
+z-index: 99999999999;
+}

@@ -1,21 +1,58 @@
-import { useParams } from "react-router-dom";
-
+import { Link, useLocation, useParams } from "react-router-dom";
+import { getItemQna, itemQnaUpdate } from "./js/adminMain";
+import parse from 'html-react-parser';
+import noImage from "../../img/no_image.gif";
 
 export default function ItemQnaEdit({title}) {
-    console.log(useParams());
-  return (
+   // console.log(useParams());
+     // 경로
+    const location = useLocation();
+    const reData = location.state;
+    const iq_id = reData?.iq_id;
+    const sfl = reData?.sfl;
+    const page = reData?.page;
+    const stx = reData?.stx;
+    
+    const {data: qa} = getItemQna(iq_id);
+   // console.log(qa); 
+
+    const {isPending, mutate} = itemQnaUpdate();
+    const handleSubmit = (e) => {
+        e.preventDefault(); // 폼 제출 시 페이지 새로고침 방지       
+        
+        // 1. FormData 객체 생성
+        const formData = new FormData(e.target);
+        
+        // 2. name 속성을 이용해 값 가져오기
+        const arr = new Array(); 
+
+        arr['mode']             = 'edt';
+        arr['iq_id']            = formData.get('iq_id');
+        arr['iq_subject']       = formData.get('iq_subject');
+        arr['iq_question']      = formData.get('iq_question');
+        arr['iq_answer']        = formData.get('iq_answer');
+        arr['page']             = formData.get('page');
+        arr['sfl']              = formData.get('sfl');
+        arr['stx']              = formData.get('stx');
+        const obj = { ...arr };
+
+        mutate(obj, {
+        onSuccess: () => {
+        },
+        onError: () => {
+            }
+        });
+    }
+
+    return (
     <>
 	<h1 id="container_title">{title}</h1>
     <div className="container_wr">
-        <form name="fitemqaform" method="post" action="./itemqaformupdate.php" onsubmit="return fitemqaform_submit(this);">
-            <input type="hidden" name="w" value="u" />
-            <input type="hidden" name="iq_id" value="1" />
-            <input type="hidden" name="sca" value="" />
-            <input type="hidden" name="sst" value="" />
-            <input type="hidden" name="sod" value="" />
-            <input type="hidden" name="sfl" value="" />
-            <input type="hidden" name="stx" value="" />
-            <input type="hidden" name="page" value="0" />
+        <form name="fitemqaform" onSubmit={handleSubmit}>
+            <input type="hidden" name="iq_id" value={iq_id} />
+            <input type="hidden" name="page" value={page} />
+            <input type="hidden" name="sfl" value={sfl} />
+            <input type="hidden" name="stx" value={stx} />
 
             <div className="local_desc01 local_desc">
                 <p>상품에 대한 문의에 답변하실 수 있습니다. 상품 문의 내용의 수정도 가능합니다.</p>
@@ -30,47 +67,43 @@ export default function ItemQnaEdit({title}) {
                     </colgroup>
                     <tbody>
                         <tr>
+                            <th scope="row">상품</th>
+                            <td>
+                                <a href={`/itemview/${qa?.it_id}`} target="_blank"> <img src={qa?.it_img1? `http://gnbiz8888.liodesign.kr/react/upload/${qa?.it_img1}`:noImage} width="100" height="100" alt="" title="" /> {qa?.it_name}</a></td>
+                        </tr>
+                        <tr>
                             <th scope="row">이름</th>
-                            <td><span className="sv_wrap"><a href="http://127.0.0.1/shop/bbs/profile.php?mb_id=chk01" className="sv_member" title="홍길삼 자기소개" target="_blank" rel="nofollow" onclick="return false;"> 홍길삼</a><span className="sv"><a href="http://127.0.0.1/shop/bbs/memo_form.php?me_recv_mb_id=chk01" rel="nofollow" onclick="win_memo(this.href); return false;">쪽지보내기</a>
-                                        <a href="http://127.0.0.1/shop/bbs/formmail.php?mb_id=chk01&amp;name=%ED%99%8D%EA%B8%B8%EC%82%BC&amp;email=mJyiaZeUctbJo9aQxqWl" onclick="win_email(this.href); return false;" rel="nofollow">메일보내기</a>
-                                        <a href="http://127.0.0.1/shop/bbs/profile.php?mb_id=chk01" onclick="win_profile(this.href); return false;" rel="nofollow">자기소개</a>
-                                        <a href="http://127.0.0.1/shop/bbs/new.php?mb_id=chk01" className="link_new_page" onclick="check_goto_new(this.href, event);" rel="nofollow">전체게시물</a>
-                                        <a href="http://127.0.0.1/shop/adm/member_form.php?w=u&amp;mb_id=chk01" target="_blank" rel="nofollow">회원정보변경</a>
-                                        <a href="http://127.0.0.1/shop/adm/point_list.php?sfl=mb_id&amp;stx=chk01" target="_blank" rel="nofollow">포인트내역</a></span><noscript className="sv_nojs"><span className="sv"><a href="http://127.0.0.1/shop/bbs/memo_form.php?me_recv_mb_id=chk01" rel="nofollow" onclick="win_memo(this.href); return false;">쪽지보내기</a>
-                                            <a href="http://127.0.0.1/shop/bbs/formmail.php?mb_id=chk01&amp;name=%ED%99%8D%EA%B8%B8%EC%82%BC&amp;email=mJyiaZeUctbJo9aQxqWl" onclick="win_email(this.href); return false;" rel="nofollow">메일보내기</a>
-                                            <a href="http://127.0.0.1/shop/bbs/profile.php?mb_id=chk01" onclick="win_profile(this.href); return false;" rel="nofollow">자기소개</a>
-                                            <a href="http://127.0.0.1/shop/bbs/new.php?mb_id=chk01" className="link_new_page" onclick="check_goto_new(this.href, event);" rel="nofollow">전체게시물</a>
-                                            <a href="http://127.0.0.1/shop/adm/member_form.php?w=u&amp;mb_id=chk01" target="_blank" rel="nofollow">회원정보변경</a>
-                                            <a href="http://127.0.0.1/shop/adm/point_list.php?sfl=mb_id&amp;stx=chk01" target="_blank" rel="nofollow">포인트내역</a></span></noscript></span></td>
+                            <td>{qa?.iq_name}</td>
                         </tr>
                         <tr>
                             <th scope="row">이메일</th>
-                            <td>chk012@test.com</td>
+                            <td>{qa?.mb_email}</td>
                         </tr>
                         <tr>
                             <th scope="row">휴대폰</th>
-                            <td>010-1111-1111</td>
+                            <td>{qa?.mb_hp}</td>
                         </tr>
                         <tr>
                             <th scope="row"><label htmlFor="iq_subject">제목</label></th>
-                            <td><input type="text" name="iq_subject" value="상품문의 입니다." id="iq_subject"  className="frm_input required" size="95" /></td>
+                            <td><input type="text" name="iq_subject"id="iq_subject"  className="frm_input required" size="95" defaultValue={qa?.iq_subject}  /></td>
                         </tr>
                         <tr>
                             <th scope="row"><label htmlFor="iq_question">질문</label></th>
-                            <td><textarea name="iq_question" id="iq_question" rows="7"></textarea></td>
+                            <td><textarea name="iq_question" id="iq_question" defaultValue={qa?.iq_question} rows="7" />
+                            </td>
 
                         </tr>
                         <tr>
                             <th scope="row"><label htmlFor="iq_answer">답변</label></th>
 
-                            <td><textarea name="iq_answer" id="iq_answer" rows="7"></textarea></td>
+                            <td><textarea name="iq_answer" id="iq_answer" rows="7" defaultValue={qa?.iq_answer} /></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <div className="btn_fixed_top">
-                <a href="./itemqalist.php?sst=&amp;sod=&amp;sfl=&amp;stx=&amp;page=0&amp;sca=" className="btn btn_02">목록</a>
+                 <Link to="/admin/itemqna" className="btn btn_02" state={{ sfl: sfl, page: page, stx: stx }}>목록</Link> &nbsp;
                 <input type="submit" accesskey="s" value="확인" className="btn_submit btn" />
             </div>
         </form>

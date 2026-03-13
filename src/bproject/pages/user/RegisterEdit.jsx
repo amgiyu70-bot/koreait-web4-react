@@ -1,158 +1,208 @@
-
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import DaumPostcode from 'react-daum-postcode';
+import { useAuthStore } from "../../stores/authStore";
+import { getMember, memberUpdate } from '../user/js/userQuery';
+import { useState } from 'react';
 
 export default function RegisterEdit() {
-  return (
-    	<div id="container_wr">	
-		<div id="container_edit">
-			<h2 id="container_title"><span title="회원 가입">회원 가입</span></h2>
 
-			<div className="register">
-				<form id="fregisterform" >	
-				<div id="register_form" className="form_01">   
-					<div className="register_form_inner">
-					<h2>사이트 이용정보 입력</h2>
-						<ul>
-							<li>
-							<label htmlFor="reg_mb_id">
-							아이디 (필수)
-							<button type="button" className="tooltip_icon"><i className="fa fa-question-circle-o" aria-hidden="true"></i><span className="sound_only">설명보기</span></button>
-							<span className="tooltip">영문자, 숫자, _ 만 입력 가능. 최소 3자이상 입력하세요.</span>
-							</label>
-							<input type="text" name="mb_id" value="" id="reg_mb_id"  className="frm_input full_input required "  maxLength={20} placeholder="아이디" />
-							<span id="msg_mb_id"></span>
-							</li>
-							<li className="half_input left_input margin_input">
-							<label htmlFor="reg_mb_password">비밀번호 (필수)</label>
-							<input type="password" name="mb_password" id="reg_mb_password"  className="frm_input full_input required" maxLength={20} placeholder="비밀번호" />
-							</li>
-							<li className="half_input left_input">
-							<label htmlFor="reg_mb_password_re">비밀번호 확인 (필수)</label>
-							<input type="password" name="mb_password_re" id="reg_mb_password_re"  className="frm_input full_input required"  maxLength={20} placeholder="비밀번호 확인" />
-							</li>
-						</ul>
-					</div>
+    const nav = useNavigate(); 
+    // 다음 우편주소
+    const postCodeStyle = {
+        background:'#434a54',
+        color:'#fff',
+        width:'128px',
+        height:'45px',
+        border:'0'
+    };
 
-					<div className="tbl_frm01 tbl_wrap register_form_inner">
-						<h2>개인정보 입력</h2>
-						<ul>
-							<li>
-							<label htmlFor="reg_mb_name">이름 (필수)</label>
-							<input type="text" id="reg_mb_name" name="mb_name" value=""  className="frm_input full_input required " size="10" placeholder="이름" />
-							</li>
-							<li>
-							<label htmlFor="reg_mb_nick">
-							이름 (필수)
-							<button type="button" className="tooltip_icon"><i className="fa fa-question-circle-o" aria-hidden="true"></i><span className="sound_only">설명보기</span></button>
-							<span className="tooltip">공백없이 한글,영문,숫자만 입력 가능 (한글2자, 영문4자 이상)<br /> 닉네임을 바꾸시면 앞으로 60일 이내에는 변경 할 수 없습니다.</span>
-							</label>
+    const themeObj = {
+    bgColor:"", 			// 바탕 배경색
+    searchBgColor: "", 		// 검색창 배경색
+    contentBgColor: "", 		// 본문 배경색(검색결과,결과없음,첫화면,검색서제스트)
+    pageBgColor: "", 		// 페이지 배경색
+    textColor: "", 			// 기본 글자색
+    queryTextColor: "#FA7142", 		// 검색창 글자색
+    postcodeTextColor: "", 	// 우편번호 글자색
+    emphTextColor: "#333333", 		// 강조 글자색
+    outlineColor: "" 		// 테두리
+    };
+    const [zonecode, setZonecode] = useState('');
+    const [address, setAddress] = useState('');
+    const [isOpen, setIsOpen] = useState(false);
 
-							
-							<input type="text" name="mb_nick" value="" id="reg_mb_nick"  className="frm_input required nospace full_input" size="10" maxLength={20} placeholder="이름" />
-							<span id="msg_mb_nick"></span>	                
-							</li>
+    const handleComplete = (data) => {
+        setZonecode(data.zonecode); // 주소 저장
+        setAddress(data.address); // 주소 저장
+        setIsOpen(false); // 팝업 닫기
+    };
 
-							<li>
-							<label htmlFor="reg_mb_email">E-mail (필수)
+    
+    const {mbID} = useAuthStore();    
+    const {data: mem} = getMember(mbID);  
 
-							</label>
+   // console.log(mem);
+    const {isPending, mutate} = memberUpdate();
 
-						  
-							<input type="text" name="mb_email" value="" id="reg_mb_email"  className="frm_input email full_input required" size="70" maxLength={100} placeholder="E-mail" />
-							</li>
+    const handleSubmit = (e) => {
+        e.preventDefault(); // 폼 제출 시 페이지 새로고침 방지       
+        
+        // 1. FormData 객체 생성
+        const formData = new FormData(e.target);
+        
+        // 2. name 속성을 이용해 값 가져오기
+        const arr = new Array(); 
+
+        arr['mode']             = 'edt';
+        arr['mb_id']            = mbID;
+        arr['mb_password']      = formData.get('mb_password');
+        arr['mb_password_re']   = formData.get('mb_password_re');
+        arr['mb_name']          = formData.get('mb_name');
+        arr['mb_email']         = formData.get('mb_email');
+        arr['mb_tel']           = formData.get('mb_tel');
+        arr['mb_hp']            = formData.get('mb_hp');
+        arr['mb_zip']           = formData.get('mb_zip');
+        arr['mb_addr1']         = formData.get('mb_addr1');
+        arr['mb_addr2']         = formData.get('mb_addr2');
+
+        if (isOpen==true) return false;
+
+        if (!arr['mb_id']) {
+            toast.error("아이디를 입력해주세요.");
+            return false;
+        }
+
+        if (arr['mb_password']) {
+
+            if (!arr['mb_password_re']) {
+                toast.error("비밀번호 확인을 입력해주세요.");
+                return false;
+            }
+
+            if (arr['mb_password']!=arr['mb_password_re']){
+                toast.error("비밀번호 확인이 틀립니다.");
+                return false;
+            }
+        }
+
+        if (!arr['mb_name']) {
+            toast.error("이름을 입력해주세요.");
+            return false;
+        }
+
+        if (!arr['mb_email']) {
+            toast.error("이메일을 입력해주세요.");
+            return false;
+        }
+
+        if (!arr['mb_tel']) {
+            toast.error("전화번호를 입력해주세요.");
+            return false;
+        }
+
+        if (!arr['mb_hp']) {
+            toast.error("핸드폰 번호를 입력해주세요.");
+            return false;
+        }
+
+        if (!arr['mb_zip']) {
+            toast.error("우편번호를 입력해주세요.");
+            return false;
+        }
+
+        if (!arr['mb_addr1']) {
+            toast.error("주소를 입력해주세요.");
+            return false;
+        }
+
+        if (!arr['mb_addr2']) {
+            toast.error("상세주소를 입력해주세요.");
+            return false;
+        }
+
+        const obj = { ...arr };
+
+        mutate(obj, {
+        onSuccess: () => {
+        },
+        onError: () => {
+            }
+        });
+    }
+
+    return (
+<div id="container">
+    <h2 id="container_title"><span title="회원 가입">회원 가입</span></h2>
+    <div className="register">
+        <form id="fregisterform" onSubmit={handleSubmit}>	
+        <div id="register_form" className="form_01">   
+            <div className="register_form_inner">
+            <h2>사이트 이용정보 입력</h2>
+                <ul>
+                    <li>
+                        <label htmlFor="reg_mb_id">
+                        아이디   : {mbID}
+                        </label>
+                        
+                        
+                    </li>
+                    <li className="half_input left_input margin_input">
+                        <label htmlFor="reg_mb_password">비밀번호 </label>
+                        <input type="password" name="mb_password" id="reg_mb_password"  className="frm_input full_input " maxLength={20} placeholder="비밀번호" />
+                    </li>
+                    <li className="half_input left_input">
+                        <label htmlFor="reg_mb_password_re">비밀번호 확인 </label>
+                        <input type="password" name="mb_password_re" id="reg_mb_password_re"  className="frm_input full_input "  maxLength={20} placeholder="비밀번호 확인" />
+                    </li>
+                </ul>
+            </div>
+
+            <div className="tbl_frm01 tbl_wrap register_form_inner">
+                <h2>개인정보 입력</h2>
+                <ul>
+                    <li>
+                        <label htmlFor="reg_mb_name">이름 (필수)</label>
+                        <input type="text" id="reg_mb_name" name="mb_name" className="frm_input  required " size="20" placeholder="이름" defaultValue={mem?.mb_name} />
+                    </li>
+
+                    <li>
+                        <label htmlFor="reg_mb_email">E-mail (필수)</label>                    
+                        <input type="email" name="mb_email"  id="reg_mb_email"  className="frm_input email  required" size="50" maxLength={100} placeholder="E-mail" defaultValue={mem?.mb_email} />
+                    </li>
 
 
-							<li>
-							<label htmlFor="reg_mb_tel">전화번호</label>
-							<input type="text" name="mb_tel" value="" id="reg_mb_tel" className="frm_input full_input " maxLength={20} placeholder="전화번호" />
-							</li>
-							<li>
-							<label htmlFor="reg_mb_hp">휴대폰번호</label>
+                    <li>
+                        <label htmlFor="reg_mb_tel">전화번호</label>
+                        <input type="text" name="mb_tel"  id="reg_mb_tel" className="frm_input  required"  size="50" maxLength={20} placeholder="전화번호" defaultValue={mem?.mb_tel} />
+                    </li>
+                    <li>
+                        <label htmlFor="reg_mb_hp">휴대폰번호</label>
+                        <input type="text" name="mb_hp"  id="reg_mb_hp" className="frm_input   required"  size="50" maxLength={20} placeholder="휴대폰번호" defaultValue={mem?.mb_hp} />   
+                    </li>
 
-							<input type="text" name="mb_hp" value="" id="reg_mb_hp" className="frm_input full_input  " maxLength={20} placeholder="휴대폰번호" />
-							</li>
+                    <li>
+                        <label>주소</label>
+                        <label htmlFor="reg_mb_zip" className="sound_only">우편번호</label>
+                        <input type="text" name="mb_zip" value={zonecode? zonecode: mem?.mb_zip} id="reg_mb_zip" className="frm_input twopart_input required" size="5" maxLength={6} placeholder="우편번호" readOnly  />
+                        <button type="button" className="btn_frmline" onClick={() => setIsOpen(true)}>주소 검색</button><br />
+                        {isOpen && <DaumPostcode onComplete={handleComplete} theme={themeObj} />}
+                        <input type="text" name="mb_addr1" value={address? address : mem?.mb_addr1} id="reg_mb_addr1" className="frm_input frm_address full_input required" size="50" placeholder="기본주소" readOnly  />
+                        <label htmlFor="reg_mb_addr1" className="sound_only">기본주소</label><br />
 
-							<li>
-							<label>주소</label>
-							<label htmlFor="reg_mb_zip" className="sound_only">우편번호</label>
-							<input type="text" name="mb_zip" value="" id="reg_mb_zip" className="frm_input twopart_input " size="5" maxLength={6} placeholder="우편번호" />
-							<button type="button" className="btn_frmline" onclick="win_zip('fregisterform', 'mb_zip', 'mb_addr1', 'mb_addr2', 'mb_addr3', 'mb_addr_jibeon');">주소 검색</button><br />
-							<input type="text" name="mb_addr1" value="" id="reg_mb_addr1" className="frm_input frm_address full_input " size="50" placeholder="기본주소" />
-							<label htmlFor="reg_mb_addr1" className="sound_only">기본주소</label><br />
-							<input type="text" name="mb_addr2" value="" id="reg_mb_addr2" className="frm_input frm_address full_input" size="50" placeholder="상세주소" />
-							<label htmlFor="reg_mb_addr2" className="sound_only">상세주소</label>
-							<br />
-							<input type="text" name="mb_addr3" value="" id="reg_mb_addr3" className="frm_input frm_address full_input" size="50"  placeholder="참고항목" />
-							<label htmlFor="reg_mb_addr3" className="sound_only">참고항목</label>
-							</li>
-						</ul>
-					</div>
-
-					<div className="tbl_frm01 tbl_wrap register_form_inner">
-						<h2>기타 개인설정</h2>
-						<ul>
-							<li className="chk_box">
-							<input type="checkbox" name="mb_open" value="1" id="reg_mb_open" checked="" className="selec_chk" />
-							<label htmlFor="reg_mb_open">
-							<span></span>
-							<b className="sound_only">정보공개</b>
-							</label>      
-							<span className="chk_li">다른분들이 나의 정보를 볼 수 있도록 합니다.</span>
-							<button type="button" className="tooltip_icon"><i className="fa fa-question-circle-o" aria-hidden="true"></i><span className="sound_only">설명보기</span></button>
-							<span className="tooltip">
-							정보공개를 바꾸시면 앞으로 0일 이내에는 변경이 안됩니다.
-							</span>
-							</li>
-						</ul>
-					</div>
-
-
-
-
-				</div>
-				<div className="btn_confirm">
-					<a href="http://localhost/shop" className="btn_close">취소</a>
-					<button type="submit" id="btn_submit" className="btn_submit" accesskey="s">회원가입</button>
-				</div>
-				</form>
-			</div>
-		</div>
-
-		<div id="aside">
-				
-			{/* 로그인 후 아웃로그인 시작 */}
-			<section id="ol_after" className="ol">
-				<header id="ol_after_hd">
-					<h2>나의 회원정보</h2>
-					<span className="profile_img">
-						<img src="http://127.0.0.1/shop/img/no_profile.gif" alt="profile_image" />        </span>
-					<strong>홍길삼님</strong>
-					<a href="http://127.0.0.1/shop/bbs/member_confirm.php?url=register_form.php" id="ol_after_info" title="정보수정">정보수정</a>
-						</header>
-				<ul id="ol_after_private">
-					<li>
-						<a href="http://127.0.0.1/shop/bbs/point.php" target="_blank" id="ol_after_pt" className="win_point">
-							<i className="fa fa-database" aria-hidden="true"></i>포인트
-							<strong>1,100</strong>
-						</a>
-					</li>
-					<li>
-						<a href="http://127.0.0.1/shop/bbs/memo.php" target="_blank" id="ol_after_memo" className="win_memo">
-							<i className="fa fa-envelope-o" aria-hidden="true"></i><span className="sound_only">안 읽은 </span>쪽지
-							<strong>0</strong>
-						</a>
-					</li>
-					<li>
-						<a href="http://127.0.0.1/shop/bbs/scrap.php" target="_blank" id="ol_after_scrap" className="win_scrap">
-							<i className="fa fa-thumb-tack" aria-hidden="true"></i>스크랩
-							<strong className="scrap">0</strong>
-						</a>
-					</li>
-				</ul>
-				<footer>
-					<a href="http://127.0.0.1/shop/bbs/logout.php" id="ol_after_logout"><i className="fa fa-sign-out" aria-hidden="true"></i> 로그아웃</a>
-				</footer>
-			</section>
-		 </div>
-	</div>
-  )
+                        <input type="text" name="mb_addr2"  id="reg_mb_addr2" className="frm_input frm_address full_input required" size="50" placeholder="상세주소" defaultValue={mem?.mb_addr2} />
+                        <label htmlFor="reg_mb_addr2" className="sound_only">상세주소</label>
+                        <br />
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div className="btn_confirm">
+            <button type="button"  className="btn_close" accesskey="s" onClick={() => nav(-1)}>최소</button>
+            <button type="submit" id="btn_submit" className="btn_submit" accesskey="s">회원수정</button>
+        </div>
+        </form>
+    </div>
+</div>
+    )
 }

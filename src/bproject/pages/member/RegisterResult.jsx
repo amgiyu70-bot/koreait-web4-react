@@ -1,13 +1,24 @@
-
+import { Link, useLocation } from "react-router-dom";
+import { AiOutlineGift } from "react-icons/ai";
 
 export default function RegisterResult() {
+  
+    const location = useLocation();
+  // location.state에서 전달받은 데이터 추출
+    const receivedData = location.state;
+
+    console.log(receivedData)
+   // if(!receivedData?.name) {
+      
+   //}
+
   return (
     <div id="container">
         <h2 id="container_title"><span title="회원가입 완료">회원가입 완료</span></h2>
         <div id="reg_result" className="register">
             <p className="reg_result_p">
-            <i className="fa fa-gift" aria-hidden="true"></i><br />
-            <strong>홍길삼</strong>님의 회원가입을 진심으로 축하합니다.
+            <AiOutlineGift size={50} /><br />
+            <strong>{receivedData?.mb_name}</strong>님의 회원가입을 진심으로 축하합니다.
             </p>
 
 
@@ -22,7 +33,7 @@ export default function RegisterResult() {
             </p>
         </div>
         <div className="btn_confirm_reg">
-        <a href="http://localhost/shop/" className="reg_btn_submit">메인으로</a>
+        <Link to="/" className="reg_btn_submit">메인으로</Link>
         </div>
     </div>
   )

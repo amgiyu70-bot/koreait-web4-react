@@ -10,9 +10,11 @@ import ItemQnaList from "../pages/admin/ItemQnaList";
 import ItemUseEdit from "../pages/admin/ItemUseEdit";
 import ItemUseList from "../pages/admin/ItemUseList";
 import MemberEdit from "../pages/admin/MemberEdit";
+import MemberForm from "../pages/admin/MemberForm";
 import MemberList from "../pages/admin/MemberList";
 import OrderForm from "../pages/admin/OrderForm";
 import OrderList from "../pages/admin/OrderList";
+import Test01 from "../pages/admin/Test01";
 
 // 전체 라우트
 export const ADMI_ROUTES =[
@@ -29,7 +31,12 @@ export const ADMI_ROUTES =[
     },
     {
         id: "memberedit",
-        path: "/admin/memberedit/*",
+        path: "/admin/memberform",
+        element: <MemberForm title="회원가입" />
+    },
+    {
+        id: "memberedit",
+        path: "/admin/memberedit",
         element: <MemberEdit title="회원수정" />
     },
     {
@@ -54,7 +61,7 @@ export const ADMI_ROUTES =[
     },
     {
         id: "itemedit",
-        path: "/admin/itemedit/*",
+        path: "/admin/itemedit",
         element: <ItemEdit title="상품수정" />
     },
     {
@@ -64,7 +71,7 @@ export const ADMI_ROUTES =[
     },
     {
         id: "itemqnaedit",
-        path: "/admin/itemqnaedit/*",
+        path: "/admin/itemqnaedit",
         element: <ItemQnaEdit title="상품문의 수정" />
     },
     {
@@ -74,7 +81,7 @@ export const ADMI_ROUTES =[
     },
     {
         id: "itemuseedit",
-        path: "/admin/itemuseedit/*",
+        path: "/admin/itemuseedit",
         element: <ItemUseEdit title="상품후기 수정" />
     },
     {
@@ -89,7 +96,12 @@ export const ADMI_ROUTES =[
     },
     {
         id: "categoryedit",
-        path: "/admin/categoryedit/*",
+        path: "/admin/categoryedit",
         element: <CategoryEdit title="상품분류 수정" />
+    },
+    {
+        id: "test01",
+        path: "/admin/test01",
+        element: <Test01 title="상품분류 수정" />
     },
 ]

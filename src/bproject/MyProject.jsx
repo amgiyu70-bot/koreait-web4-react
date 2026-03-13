@@ -9,7 +9,7 @@ export default function MyProject() {
   return (
     <QueryClientProvider client={queryClient}>
       <Global />
-      <ToastContainer />
+      <ToastContainer autoClose={1000} />
       <BrowserRouter>       
 
         <MainRoutes />

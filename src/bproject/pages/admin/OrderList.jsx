@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { getOrderList } from "./js/adminMain";
 import DatePicker from "react-datepicker"; // 기본 설정 1
 import "react-datepicker/dist/react-datepicker.css"; // 기본 설정 2
@@ -7,20 +7,58 @@ import { ko } from "date-fns/locale"; // 한국어 설정
 
 export default function OrderList({title}) {
 
+    // 경로
+    const location = useLocation();
+    const reData = location.state;   
+    const sflL = reData?.sfl? reData?.sfl : "o_id";
+    const pageL = reData?.page ? reData?.page : 1;
+    const stxL = reData?.stx? reData?.stx : "";    
+      
     const [inputVal, setInputVal] = useState("");
-    const [stx, setStx] = useState("");
-    const [sfl, setSfl] = useState("o_id");
+    const [sfl, setSfl] = useState(sflL);
+    const [stx, setStx] = useState(stxL);
+    const [page, setPage] = useState(pageL);  
     const [selSfl, setSelSfl] = useState("");
-    const [page, setPage] = useState(1);  
+    //const [startDate, setStartDate] = useState(new Date());
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+
+    const [sdate, setSdate] = useState("");
+    const [edate, setEdate] = useState("");
+
+    const [status, setStatus] = useState("");
+    const [settle, setSettle] = useState("");
+    const [search, setSearch] = useState("");
     
     const onChageValue = (e) => {
        setSelSfl(e.target.value);
     }
 
+    console.log(sdate);
+
     const onClickSearch = () => {
         setStx(inputVal);
         setPage(1);
         setSfl(selSfl);
+        setSearch(Date.now());
+
+        if (startDate) {
+            setSdate(startDate.getFullYear() + '-' + (startDate.getMonth() + 1).toString().padStart(2, '0') + '-' + startDate.getDate().toString().padStart(2, '0'));
+        } else {
+           setSdate("");
+        }
+        if (endDate) {
+            setEdate(endDate.getFullYear() + '-' + (endDate.getMonth() + 1).toString().padStart(2, '0') + '-' + endDate.getDate().toString().padStart(2, '0'));
+
+        } else {
+            setEdate("");
+        }
+        
+      // console.log(startDate.getFullYear() + '-' + (startDate.getMonth() + 1).toString().padStart(2, '0') + '-' + startDate.getDate().toString().padStart(2, '0'));
+        // return startDate.getFullYear() + '-' + (startDate.getMonth() + 1).toString().padStart(2, '0') + '-' + startDate.getDate().toString().padStart(2, '0')
+
+        console.log(sdate)
+       
     }
 
     const allPageList = () => {
@@ -33,7 +71,7 @@ export default function OrderList({title}) {
         setPage(v);
     }
 
-    const {data: item, isLoing, isError, error} = getOrderList(stx, sfl, page); 
+    const {data: item, isLoing, isError, error} = getOrderList(stx, sfl, page, sdate, edate, status, settle, search); 
     const total = (item && item?.mode[0]?.total> 0) ? item?.mode[0]?.total:0;
     const total_page = (item && item?.mode[0]?.total_page> 0)? item?.mode[0]?.total_page: 0;
 
@@ -99,17 +137,13 @@ export default function OrderList({title}) {
     let tPriceSum = 0;
     let mPriceSum = 0;
 
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(null);
-  return (
-
-    
-
+  
+  return (   
     <>
 	<h1 id="container_title">{title}</h1>
     <div className="container_wr">
         <div className="local_ov01 local_ov">
-            <button className="bt_listall" onClick={allPageList}>전체목록</button> 
+            <button className="bt_listall" onClick={allPageList}>전체목록</button>&nbsp; 
             <span className="btn_ov01">
                 <span className="ov_txt">전체 주문내역</span><span className="ov_num"> {total}건</span>
             </span>
@@ -146,62 +180,46 @@ export default function OrderList({title}) {
 
         </span>
 
-        <form className="local_sch03 local_sch">
+        <div className="local_sch03 local_sch">
             <div>
                 <strong>주문상태</strong>
-                <input type="radio" name="od_status" value="" id="od_status_all" checked="checked" />
+                <input type="radio" name="status" value="" id="od_status_all" defaultChecked onClick={()=>setStatus("")} />
                 <label htmlFor="od_status_all">전체</label>
-                <input type="radio" name="od_status" value="주문" id="od_status_odr" />
+                <input type="radio" name="status" value="주문" id="od_status_odr" onClick={()=>setStatus("주문")} />
                 <label htmlFor="od_status_odr">주문</label>
-                <input type="radio" name="od_status" value="입금" id="od_status_income" />
+                <input type="radio" name="status" value="입금" id="od_status_income" onClick={()=>setStatus("입금")} />
                 <label htmlFor="od_status_income">입금</label>
-                <input type="radio" name="od_status" value="준비" id="od_status_rdy" />
+                <input type="radio" name="status" value="준비" id="od_status_rdy" onClick={()=>setStatus("준비")} />
                 <label htmlFor="od_status_rdy">준비</label>
-                <input type="radio" name="od_status" value="배송" id="od_status_dvr" />
+                <input type="radio" name="status" value="배송" id="od_status_dvr" onClick={()=>setStatus("배송")} />
                 <label htmlFor="od_status_dvr">배송</label>
-                <input type="radio" name="od_status" value="완료" id="od_status_done" />
+                <input type="radio" name="status" value="완료" id="od_status_done" onClick={()=>setStatus("완료")} />
                 <label htmlFor="od_status_done">완료</label>
-                <input type="radio" name="od_status" value="전체취소" id="od_status_cancel" />
+                <input type="radio" name="status" value="전체취소" id="od_status_cancel" onClick={()=>setStatus("전체취소")} />
                 <label htmlFor="od_status_cancel">전체취소</label>
-                <input type="radio" name="od_status" value="부분취소" id="od_status_pcancel" />
+                <input type="radio" name="status" value="부분취소" id="od_status_pcancel" onClick={()=>setStatus("부분취소")} />
                 <label htmlFor="od_status_pcancel">부분취소</label>
             </div>
 
             <div>
                 <strong>결제수단</strong>
-                <input type="radio" name="od_settle_case" value="" id="od_settle_case01" checked="checked" />
+                <input type="radio" name="settle" value="" id="od_settle_case01" defaultChecked onClick={()=>setSettle("")}  />
                 <label htmlFor="od_settle_case01">전체</label>
-                <input type="radio" name="od_settle_case" value="무통장" id="od_settle_case02" />
+                <input type="radio" name="settle" value="무통장" id="od_settle_case02" onClick={()=>setSettle("무통장")} />
                 <label htmlFor="od_settle_case02">무통장</label>
-                <input type="radio" name="od_settle_case" value="가상계좌" id="od_settle_case03" />
+                <input type="radio" name="settle" value="가상계좌" id="od_settle_case03" onClick={()=>setSettle("가상계좌")} />
                 <label htmlFor="od_settle_case03">가상계좌</label>
-                <input type="radio" name="od_settle_case" value="계좌이체" id="od_settle_case04" />
+                <input type="radio" name="settle" value="계좌이체" id="od_settle_case04" onClick={()=>setSettle("계좌이체")} />
                 <label htmlFor="od_settle_case04">계좌이체</label>
-                <input type="radio" name="od_settle_case" value="휴대폰" id="od_settle_case05" />
+                <input type="radio" name="settle" value="휴대폰" id="od_settle_case05" onClick={()=>setSettle("휴대폰")} />
                 <label htmlFor="od_settle_case05">휴대폰</label>
-                <input type="radio" name="od_settle_case" value="신용카드" id="od_settle_case06" />
+                <input type="radio" name="settle" value="신용카드" id="od_settle_case06" onClick={()=>setSettle("신용카드")} />
                 <label htmlFor="od_settle_case06">신용카드</label>
-                <input type="radio" name="od_settle_case" value="간편결제" id="od_settle_case07" />
-                <label htmlFor="od_settle_case07" data-tooltip-text="NHN_KCP 간편결제 : PAYCO, 네이버페이, 카카오페이(NHN_KCP), 애플페이(NHN_KCP) 
-    LG유플러스 간편결제 : PAYNOW 
-    KG 이니시스 간편결제 : KPAY, 삼성페이, LPAY, 카카오페이(KG이니시스)">PG간편결제</label>
-                <input type="radio" name="od_settle_case" value="KAKAOPAY" id="od_settle_case08" />
-                <label htmlFor="od_settle_case08">KAKAOPAY</label>
+                <input type="radio" name="od_settle_case" value="KAKAOPAY" id="od_settle_case07" onClick={()=>setSettle("KAKAOPAY")} />
+                <label htmlFor="od_settle_case07">KAKAOPAY</label>
             </div>
 
-            <div>
-                <strong>기타선택</strong>
-                <input type="checkbox" name="od_misu" value="Y" id="od_misu01" />
-                <label htmlFor="od_misu01">미수금</label>
-                <input type="checkbox" name="od_cancel_price" value="Y" id="od_misu02" />
-                <label htmlFor="od_misu02">반품,품절</label>
-                <input type="checkbox" name="od_refund_price" value="Y" id="od_misu03" />
-                <label htmlFor="od_misu03">환불</label>
-                <input type="checkbox" name="od_receipt_point" value="Y" id="od_misu04" />
-                <label htmlFor="od_misu04">포인트주문</label>
-                <input type="checkbox" name="od_coupon" value="Y" id="od_misu05" />
-                <label htmlFor="od_misu05">쿠폰</label>
-            </div>
+            
 
             <div className="sch_last">
                 <strong>주문일자</strong>
@@ -247,9 +265,9 @@ export default function OrderList({title}) {
                  />
                
                 
-                <input type="submit" value="검색" className="btn_submit" />
+                <input type="button" value="검색" className="btn_submit"  onClick={onClickSearch} />
             </div>
-        </form>
+        </div>
 
         
             <input type="hidden" name="search_od_status" value="" />
@@ -325,7 +343,7 @@ export default function OrderList({title}) {
                             
                             }</td>
                             <td rowspan="3" className="td_mng td_mng_s">
-                                <Link to="/admin/orderform" className="btn btn_03">보기</Link>
+                                <Link to="/admin/orderform"  state={{ o_id: o_id, sfl: sfl, page: page, stx: stx }} className="btn btn_03">보기</Link>
                             </td>
                         </tr>
                         <tr className="bg0">

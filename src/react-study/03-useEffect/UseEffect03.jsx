@@ -11,16 +11,11 @@ export default function UseEffect03() {
    
     const chkTemp = (e) => {
         const val = e.target.name;
-
         if (val=="+") {
             setTemp((prev) => prev+1);
         } else {
-
              setTemp((prev) => prev-1);
-
-        }
-
-      
+        }      
     }
       
 
